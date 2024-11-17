@@ -21,7 +21,7 @@ public abstract class Administrador extends Usuario {
         this.listaUsuarios = new ArrayList<>();
     }
 
-    // Métodos para gestionar usuarios
+  
     public void agregarUsuario(Usuario usuario) {
         listaUsuarios.add(usuario);
     }

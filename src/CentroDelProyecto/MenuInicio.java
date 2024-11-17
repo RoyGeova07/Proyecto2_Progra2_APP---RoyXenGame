@@ -44,7 +44,7 @@ public class MenuInicio extends JFrame {
         // Fondo de pantalla
         fondo = new JLabel();
         fondo.setLayout(new GridBagLayout()); // Permite centrar los botones
-        cargarFondo("/img_menuprin/im.jpg"); // Cambiar la ruta según tu archivo
+        cargarFondo("/img_menuprin/im.jpg"); 
         panelPrincipal.add(fondo, BorderLayout.CENTER);
 
         // Crear los botones
@@ -55,7 +55,7 @@ public class MenuInicio extends JFrame {
         // Añadir los botones al fondo
         JPanel panelBotones = new JPanel();
         panelBotones.setOpaque(false); // Transparente para que se vea el fondo
-        panelBotones.setLayout(new GridLayout(3, 1, 10, 10)); // Botones en columna con separación
+        panelBotones.setLayout(new GridLayout(3, 1, 10, 10)); // Botones en columna con separacion
 
         panelBotones.add(botonCrearUsuario);
         panelBotones.add(botonIniciarSesion);

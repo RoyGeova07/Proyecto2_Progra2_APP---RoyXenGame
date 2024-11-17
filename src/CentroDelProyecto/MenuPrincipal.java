@@ -48,7 +48,7 @@ public class MenuPrincipal extends JFrame {
         fondo = new JLabel();
         fondo.setBounds(0, 0, getWidth(), getHeight()); // Tamaño inicial del fondo
         cargarFondo("/img_menuprin/fondo.jpg");
-        layeredPane.add(fondo, Integer.valueOf(0)); // Agregar el fondo en la capa más baja
+        layeredPane.add(fondo, Integer.valueOf(0)); // Agregar el fondo en la capa mas baja
 
         // Crear panel de botones
         panelBotones = new JPanel(new GridBagLayout());
