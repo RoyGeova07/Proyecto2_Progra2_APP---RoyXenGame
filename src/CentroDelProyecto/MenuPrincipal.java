@@ -123,6 +123,12 @@ public class MenuPrincipal extends JFrame {
             
         });
         
+        Administracion.addActionListener(e-> {
+            
+            //AGREGAR INSTANCIA DE ADMINISTRACION 
+            
+        });
+        
         Cerrar_Sesion.addActionListener(e-> {
             
             MenuInicio inicio=new MenuInicio();
