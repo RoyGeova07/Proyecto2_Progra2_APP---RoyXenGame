@@ -135,7 +135,4 @@ public class CrearUsuario extends JFrame {
         adminCheckBox.setSelected(false);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new CrearUsuario().setVisible(true));
-    }
 }

@@ -127,10 +127,5 @@ public class MenuInicio extends JFrame {
         return boton;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MenuInicio menuInicio = new MenuInicio();
-            menuInicio.setVisible(true);
-        });
-    }
+   
 }

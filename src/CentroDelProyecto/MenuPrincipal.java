@@ -5,10 +5,14 @@
 package CentroDelProyecto;
 
 import Base_De_Datos.ManejoUsuarios;
+import Reproductor.VentanaPrincipal;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
 
 
 /**
@@ -105,38 +109,34 @@ public class MenuPrincipal extends JFrame {
             
         });
         
-        Musicas.addActionListener(e-> {
-            
-            //AGREGAR INSTANCIA REPRODUCTOR
-            
-        });
+        Musicas.addActionListener(e-> cargarReproductorMusica());
         
-        Discord.addActionListener(e-> {
-            
+        Discord.addActionListener(e -> {
+
             //AGREGAR INSTANCIA DISCORD
             
         });
-        
-        Perfil.addActionListener(e-> {
-            
+
+        Perfil.addActionListener(e -> {
+
             //AGREGAR INSTANCIA PERFIL
             
         });
-        
-        Administracion.addActionListener(e-> {
-            
+
+        Administracion.addActionListener(e -> {
+
             //AGREGAR INSTANCIA DE ADMINISTRACION 
             
         });
-        
-        Cerrar_Sesion.addActionListener(e-> {
-            
-            MenuInicio inicio=new MenuInicio();
+
+        Cerrar_Sesion.addActionListener(e -> {
+
+            MenuInicio inicio = new MenuInicio();
             inicio.setVisible(true);
             dispose();
-            
+
         });
-        
+
     }
 
     private void cargarFondo(String ruta) {
@@ -149,45 +149,68 @@ public class MenuPrincipal extends JFrame {
         }
     }
 
-   private JButton crearBoton(String texto, String rutaIcono) {
-    JButton boton = new JButton(texto);
+    private JButton crearBoton(String texto, String rutaIcono) {
+        JButton boton = new JButton(texto);
 
-    // Cargar el icono
-    try {
-        ImageIcon icono = new ImageIcon(getClass().getResource(rutaIcono));
-        Image img = icono.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Tamaño del icono
-        boton.setIcon(new ImageIcon(img));
-    } catch (Exception e) {
-        System.out.println("No se pudo cargar el icono: " + rutaIcono);
+        // Cargar el icono
+        try {
+            ImageIcon icono = new ImageIcon(getClass().getResource(rutaIcono));
+            Image img = icono.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Tamaño del icono
+            boton.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el icono: " + rutaIcono);
+        }
+
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.BOTTOM);
+        boton.setFont(new Font("Consolas", Font.PLAIN, 12));
+        boton.setPreferredSize(new Dimension(100, 100));
+
+        // Transparencia en reposo
+        boton.setContentAreaFilled(false); // Quitar el fondo en reposo
+        boton.setOpaque(false);           // Garantizar la transparencia
+        boton.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 50))); // Borde transparente claro
+
+        // Cambiar el color al hacer clic
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(true); // Fondo visible al hacer clic
+                boton.setBackground(new Color(200, 200, 200, 100)); // Color suave al presionar
+            }
+
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(false); // Regresar a transparente
+            }
+        });
+
+        boton.setForeground(Color.WHITE); // Mantener el texto blanco para visibilidad
+
+        return boton;
     }
 
-    boton.setHorizontalTextPosition(SwingConstants.CENTER);
-    boton.setVerticalTextPosition(SwingConstants.BOTTOM);
-    boton.setFont(new Font("Consolas", Font.PLAIN, 12));
-    boton.setPreferredSize(new Dimension(100, 100)); 
+    //aqui funcion para 
+    private void cargarReproductorMusica() {
+        JFXPanel jfxPanel = new JFXPanel();
+        jfxPanel.setPreferredSize(new Dimension(850, 750));
 
-    // Transparencia en reposo
-    boton.setContentAreaFilled(false); // Quitar el fondo en reposo
-    boton.setOpaque(false);           // Garantizar la transparencia
-    boton.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 50))); // Borde transparente claro
+        Platform.runLater(() -> {
+            try {
+                Scene escena = new Scene(new VentanaPrincipal(), 850, 750);
+                jfxPanel.setScene(escena);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
-    // Cambiar el color al hacer clic
-    boton.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mousePressed(java.awt.event.MouseEvent evt) {
-            boton.setContentAreaFilled(true); // Fondo visible al hacer clic
-            boton.setBackground(new Color(200, 200, 200, 100)); // Color suave al presionar
-        }
-
-        public void mouseReleased(java.awt.event.MouseEvent evt) {
-            boton.setContentAreaFilled(false); // Regresar a transparente
-        }
-    });
-
-    boton.setForeground(Color.WHITE); // Mantener el texto blanco para visibilidad
-
-    return boton;
-}
-
+        JFrame reproductorFrame = new JFrame("Reproductor de Música");
+        reproductorFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        reproductorFrame.getContentPane().add(jfxPanel);
+        reproductorFrame.pack();
+        reproductorFrame.setLocationRelativeTo(null);
+        reproductorFrame.setVisible(true);
+        
+        //dispose();
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

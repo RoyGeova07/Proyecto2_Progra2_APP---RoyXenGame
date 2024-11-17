@@ -122,7 +122,4 @@ public class LogIn extends JFrame {
         passwordField.setText("");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LogIn().setVisible(true));
-    }
 }
