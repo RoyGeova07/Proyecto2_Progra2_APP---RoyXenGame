@@ -20,8 +20,8 @@ public class Reproductor_Musica extends Application {
     @Override //funcion por default de javafxx
     public void start(Stage stage) throws Exception {
         this.stage = stage;
-        Scene escena = new Scene(new VentanaPrincipal(), 850, 750);
-        stage.setScene(escena);
+        //Scene escena = new Scene(new VentanaPrincipal(), 850, 750);
+        //stage.setScene(escena);
         stage.show();
 
     }

@@ -4,51 +4,73 @@
  */
 package Reproductor;
 
+import Pantallas_Principales.MenuPrincipal;
+import java.io.File;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author royum
  */
-public class BarraSuperior extends MenuBar { //aqui barra vacia
+public class BarraSuperior extends MenuBar {
+    private Menu menuArvchivoSistema, menuArchivoUsuario;
+    private MenuItem iAbrir, iSalir, AbrirMusicasUsuario,reiniciar;
+    private String nombre;
+    private MenuPrincipal menuPrincipal; // Agrega esta referencia
 
-    private Menu menuArchivo,menuVolver;
-    private MenuItem iAbrir, iSalir,iVolver;
+    public BarraSuperior(String nombreUsuario, MenuPrincipal menuPrincipal) {
+        this.nombre = nombreUsuario;
+        this.menuPrincipal = menuPrincipal; // Inicializa la referencia
 
-    public BarraSuperior() {
-
-        menuArchivo = new Menu("Archivo");
-        menuVolver=new Menu("Volver");
+        menuArvchivoSistema = new Menu("Archivos Computadora");
+        menuArchivoUsuario = new Menu("Archivos Usuario " + nombre);
         iAbrir = new MenuItem("Abrir");
         iSalir = new MenuItem("Salir");
-        iVolver = new MenuItem("Volver al Menú Principal");
+        reiniciar=new MenuItem("reiniciar");
+        AbrirMusicasUsuario = new MenuItem("Abrir musicas de " + nombre);
         prepararListener();
         prepararMenus();
-
     }
-
+    
     private void prepararMenus() {
-        //este nos devuelve una lista de todos los items
-        menuArchivo.getItems().addAll(iAbrir, iSalir);
-        
-        menuVolver.getItems().add(iVolver);
-        
-        this.getMenus().addAll(menuArchivo,menuVolver);
 
+        menuArvchivoSistema.getItems().addAll(iAbrir, iSalir);
+
+        menuArchivoUsuario.getItems().addAll(AbrirMusicasUsuario, reiniciar);
+
+        this.getMenus().addAll(menuArvchivoSistema, menuArchivoUsuario);
     }
 
     private void prepararListener() {
+        try {
+            iAbrir.setOnAction(e -> ExploradorArchivosSistema.SeleccionarArchivo());
+            iSalir.setOnAction(e -> Reproductor_Musica.getStage().close());
 
-        iAbrir.setOnAction(e -> ExploradorArchivos.SeleccionarArchivo());
-        iSalir.setOnAction(e -> Reproductor_Musica.getStage().close());// aqui cerrara la ventana y terminar la ejecucion/
-        
-        iVolver.setOnAction(e-> {
+            reiniciar.setOnAction(e -> {
+                // Usar la referencia de menuPrincipal para acceder al método
+                menuPrincipal.cargarReproductorMusica(menuPrincipal);
+            });
+            
+            AbrirMusicasUsuario.setOnAction((e-> {
+                
+                File directorioUsuario=new File(System.getProperty("user.dir"));
+                ArchivosUsuarios archivosUsuarios=new ArchivosUsuarios(directorioUsuario,nombre);
+                
+                Stage stage=new Stage();
+                archivosUsuarios.start(stage);
+                
+            }));
             
             
-        });
-
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al abrir un explorador" + e.getMessage());
+        }
     }
 
+   
 }

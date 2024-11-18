@@ -39,10 +39,16 @@ public class Usuario implements Serializable {
     }
 
     private void crearCarpetas() {
+        
+        File carpetaPrincipal=new File(nombre);
 
-        File CarpetaMusica = new File(nombre + "_Musica");
-        File CarpetaJuegos = new File(nombre + "_Juegos");
+        File CarpetaMusica = new File(carpetaPrincipal, "Musica");
+        File CarpetaJuegos = new File(carpetaPrincipal, "Juegos");
 
+        if(!carpetaPrincipal.exists()){
+            carpetaPrincipal.mkdir();
+        }
+        
         if (!CarpetaMusica.exists()) {
             CarpetaMusica.mkdir();
         }
@@ -52,14 +58,6 @@ public class Usuario implements Serializable {
 
     }
 
-    public void AgregarMusica(Musica musica) {
-        bibliotecaMusical.add(musica);
-    }
-
-    public void eliminarMusica(String titulo) {
-        bibliotecaMusical.removeIf(m -> m.getTitulo().equalsIgnoreCase(titulo));
-    }
-
     public void ListaMusicas() {
         String mensaje;
         mensaje = "Biblioteca Musical";
@@ -67,13 +65,6 @@ public class Usuario implements Serializable {
 
     }
 
-    public void AgregarJuego(Juego juego) {
-        bibliotecaJuego.add(juego);
-    }
-
-    public void EliminarJuego(Juego titulo) {
-        bibliotecaJuego.removeIf(m -> m.getNombre().equalsIgnoreCase(nombre));
-    }
 
     public void listarJuegos() {
         System.out.println("Biblioteca de Juegos:");

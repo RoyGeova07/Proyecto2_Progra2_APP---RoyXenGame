@@ -4,6 +4,7 @@
  */
 package Reproductor;
 
+import Pantallas_Principales.MenuPrincipal;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -12,9 +13,9 @@ import javafx.scene.layout.BorderPane;
  *///
 public class VentanaPrincipal extends BorderPane{
     
-    public VentanaPrincipal(){
+    public VentanaPrincipal(String nombreUsuario, MenuPrincipal menuprincipal){
         
-        setTop(new BarraSuperior());
+        setTop(new BarraSuperior(nombreUsuario,menuprincipal));
         setCenter(new InfoCancion());
         setBottom(new BarraInferior());
         
@@ -22,3 +23,4 @@ public class VentanaPrincipal extends BorderPane{
     
     
 }
+   
