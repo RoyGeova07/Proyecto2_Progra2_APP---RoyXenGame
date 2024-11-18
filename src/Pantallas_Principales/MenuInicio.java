@@ -114,7 +114,7 @@ public class MenuInicio extends JFrame {
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createLineBorder(new Color(0, 122, 204), 2, true));
 
-        // Efecto de hover (cambiar color al pasar el ratón)
+        // Efecto de hover (cambiar color al pasar el mouse)
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 boton.setBackground(new Color(0, 122, 204));

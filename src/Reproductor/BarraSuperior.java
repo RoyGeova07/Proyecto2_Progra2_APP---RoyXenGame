@@ -39,9 +39,9 @@ public class BarraSuperior extends MenuBar {
     
     private void prepararMenus() {
 
-        menuArvchivoSistema.getItems().addAll(iAbrir, iSalir);
+        menuArvchivoSistema.getItems().add(iAbrir);
 
-        menuArchivoUsuario.getItems().addAll(AbrirMusicasUsuario, reiniciar);
+        menuArchivoUsuario.getItems().add(AbrirMusicasUsuario);
 
         this.getMenus().addAll(menuArvchivoSistema, menuArchivoUsuario);
     }
@@ -52,19 +52,17 @@ public class BarraSuperior extends MenuBar {
             iSalir.setOnAction(e -> Reproductor_Musica.getStage().close());
 
             reiniciar.setOnAction(e -> {
-                // Usar la referencia de menuPrincipal para acceder al método
+                // Usar la referencia de menuPrincipal para acceder a la funcion
                 menuPrincipal.cargarReproductorMusica(menuPrincipal);
             });
-            
-            AbrirMusicasUsuario.setOnAction((e-> {
-                
-                File directorioUsuario=new File(System.getProperty("user.dir"));
-                ArchivosUsuarios archivosUsuarios=new ArchivosUsuarios(directorioUsuario,nombre);
-                
-                Stage stage=new Stage();
-                archivosUsuarios.start(stage);
-                
-            }));
+
+            AbrirMusicasUsuario.setOnAction(e -> {
+                String nombreUsuario = nombre; // Obtener el nombre del usuario logueado
+                ArchivosUsuarios archivosUsuarios = new ArchivosUsuarios(nombreUsuario);
+
+                Stage stage = new Stage();
+                archivosUsuarios.abrirFileChooserYReproducir(stage); // Abrir el FileChooser directamente
+            });
             
             
         } catch (Exception e) {

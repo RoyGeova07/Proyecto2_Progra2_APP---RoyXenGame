@@ -159,10 +159,10 @@ public class MenuPrincipal extends JFrame {
 
     private void cargarFondo(String ruta) {
         try {
-            // Carga el GIF o imagen normal como ImageIcon
+            
             ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
 
-            // Escalar el GIF o imagen al tamaño del JFrame
+            
             Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
 
             // Usar el icono escalado en el JLabel
