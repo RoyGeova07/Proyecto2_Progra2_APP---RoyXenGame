@@ -9,19 +9,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  *
  * @author royum
  */
 public class LogIn extends JFrame {
-
+    
     private JTextField usuarioField;
     private JPasswordField passwordField;
     private JButton iniciarSesionButton;
     private JButton cancelarButton;
     private JButton volverButton;
     private ManejoUsuarios manejoUsuarios;
+     private File archivoUsuario;//para el archivo binario
 
     public LogIn() {
         manejoUsuarios = new ManejoUsuarios();
@@ -88,8 +90,9 @@ public class LogIn extends JFrame {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 if (manejoUsuarios.ValidarCredenciales(usuario, password)) {
-                    JOptionPane.showMessageDialog(null, "Bienvenido, " + usuario + "!");
-                    new MenuPrincipal(usuario).setVisible(true);
+                    JOptionPane.showMessageDialog(null, "Bienvenido, usuario normal " + usuario + "!"); 
+                    
+                    new MenuPrincipal(usuario,archivoUsuario).setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);

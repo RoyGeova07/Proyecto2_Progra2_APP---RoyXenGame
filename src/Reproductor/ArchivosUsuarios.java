@@ -26,10 +26,20 @@ public class ArchivosUsuarios {
     }
 
     private void inicializarDirectorioUsuario() {
-        userFolder = new File(System.getProperty("user.dir") + File.separator + nombreUsuario);
-        if (!userFolder.exists()) {
-            userFolder.mkdirs(); // Crear el directorio si no existe
+         File CarpetausuarioGestion=new File(System.getProperty("user.dir") + File.separator + "UsuariosGestion");
+         
+         
+        if (!CarpetausuarioGestion.exists()) {
+            CarpetausuarioGestion.mkdirs(); // Crear el directorio si no existe
         }
+        
+        userFolder=new File(CarpetausuarioGestion,nombreUsuario);
+        
+        //   Crear la carpeta del usuario si no existe
+        if (!userFolder.exists()) {
+            userFolder.mkdirs();
+        }
+        
     }
 
     public void abrirFileChooserYReproducir(Stage stage) {
@@ -39,7 +49,7 @@ public class ArchivosUsuarios {
         fileChooser.setInitialDirectory(userFolder);
 
         // Filtro para archivos de la musica
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de Música", "*.mp3", "*.wav"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de Música", "*.mp3", "*.wav","*.m4A"));
 
         //aqui abre el dialogo de seleccion de archivos
         File archivoSeleccionado = fileChooser.showOpenDialog(stage);
@@ -47,7 +57,7 @@ public class ArchivosUsuarios {
         //aqui Reproducir el archivo seleccionado automaticamente
         if (archivoSeleccionado != null) {
             reproducirMusica(archivoSeleccionado);
-        } else {
+        }else{
             System.out.println("No se selecciono ningin archivo.");
         }
     }

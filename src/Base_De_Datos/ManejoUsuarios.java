@@ -18,14 +18,17 @@ import javax.swing.JOptionPane;
  *
  * @author royum
  */
-public class ManejoUsuarios implements ManejoDeDatos {
+public final class ManejoUsuarios implements ManejoDeDatos {
 
     private ArrayList<Usuario> usuarios; //arhivo binario
+    private final String Carpetaraiz="UsuariosGestion";
     private final String archivoUsuarios = "usuarios.dat";//este son archivos temporales que se generan para registrar informacion informacion
 
     public ManejoUsuarios() {
         this.usuarios = new ArrayList<>();
-
+        new File(Carpetaraiz).mkdir();
+        CargarUsuarios();
+        System.out.println("usaurio cargados"+usuarios.size());
     }
 
     @Override
@@ -41,9 +44,22 @@ public class ManejoUsuarios implements ManejoDeDatos {
         }
 
         try {
-            Usuario nuevoUsuario = new Usuario(nombre, password, esAdmin);
+            Usuario nuevoUsuario;
+            if(esAdmin){
+                nuevoUsuario=new Administrador(nombre,password);
+            }else{
+                nuevoUsuario=new Usuario(nombre,password,false);
+            }
+            
             usuarios.add(nuevoUsuario);
             GuardarUsuarios();
+            
+            File CarpetaUsuario=new File(Carpetaraiz,nombre);
+            if(!CarpetaUsuario.exists()){
+                CarpetaUsuario.mkdir(); 
+                new File(CarpetaUsuario,"Juegos").mkdir();
+                new File(CarpetaUsuario,"Musica").mkdir();
+            }
             JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente", "EXITO", JOptionPane.INFORMATION_MESSAGE);
             return true;
         } catch (IOException e) {
@@ -60,7 +76,7 @@ public class ManejoUsuarios implements ManejoDeDatos {
             datos.writeObject(usuarios);//aqui se guarda la lista
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al guardar los usuarios " + e.getMessage());
-        }
+        }   
 
     }
 
@@ -83,11 +99,23 @@ public class ManejoUsuarios implements ManejoDeDatos {
         if (archivo.exists()) {
             try (ObjectInputStream leer = new ObjectInputStream(new FileInputStream(archivoUsuarios))) {
                 usuarios = (ArrayList<Usuario>) leer.readObject();
+                
+                for (Usuario usuario : usuarios) {
+                    if(usuario instanceof Administrador){
+                        
+                        System.out.println("- " + usuario.getNombre() + (usuario.EsAdmin() ? " (Admin)" : ""));
+                        
+                    }else{
+                        System.out.println("cargado usuario normal"+usuario.getNombre());
+                    }
+                }
+                
             } catch (IOException | ClassNotFoundException e) {
                 JOptionPane.showMessageDialog(null, "Error al cargar los usuarios " + e.getMessage());
             }
         } else {
             usuarios = new ArrayList<>();//si no existe el archiovo, se inicializa la lsita
+            System.out.println("No se encontró el archivo de usuarios. Iniciando con lista vacía.");
         }
 
     }
@@ -107,5 +135,98 @@ public class ManejoUsuarios implements ManejoDeDatos {
         }
 
     }
+    
+    public boolean EliminarUsuario(String nombre){
+        
+        Usuario Usuarioeliminar=ObtenerUsuario(nombre);
+        if(Usuarioeliminar!=null){
+            
+            usuarios.remove(Usuarioeliminar);
+            GuardarUsuarios();
+            
+            //aqui se eliminan las carpetas del usuario
+            File CarpetaUsuario=new File(Carpetaraiz,nombre);
+            EliminarcarpetaRecursiva(CarpetaUsuario);
+            
+            JOptionPane.showMessageDialog(null, "Usuario "+nombre+ " eliminado correctamente","exito",JOptionPane.INFORMATION_MESSAGE);
+            return true;
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "Usuario "+nombre+ " no encontrado","ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+            
+        }
+        
+    }
+    
+    private void EliminarcarpetaRecursiva(File Carpeta){
+        
+        if(Carpeta.isDirectory()){
+            
+            for (File archi : Carpeta.listFiles()) {
 
+                EliminarcarpetaRecursiva(archi);
+
+            }
+
+        }
+        Carpeta.delete();
+    }
+
+    public boolean Renombrarusuario(String nombreActual, String nombre) {
+
+        Usuario usua = ObtenerUsuario(nombreActual);
+        if (usua != null) {
+
+            File Carpetaactual = new File(Carpetaraiz, nombreActual);
+            File Carpetanueva = new File(Carpetaraiz, nombre);
+
+            if (Carpetaactual.renameTo(Carpetanueva)) {
+
+                usua.setNombre(nombre);
+                GuardarUsuarios();
+                JOptionPane.showMessageDialog(null, "Usuario renombrado exitosamente", "exito", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            } else {
+
+                JOptionPane.showMessageDialog(null, "No se pudo renombrar", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+
+            }
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Usuario no encontrado", "error", JOptionPane.ERROR_MESSAGE);
+            return false;
+
+        }
+
+    }
+
+    public Usuario ObtenerUsuario(String nombre) {
+
+        for (Usuario usu : usuarios) {
+
+            if (usu.getNombre().equalsIgnoreCase(nombre)) {
+                return usu;
+            }
+
+        }
+        return null;
+
+    }
+
+    public boolean esAdmin(String nombreUsuario) {
+        Usuario usuario = ObtenerUsuario(nombreUsuario);
+
+        if (usuario == null) {
+            System.out.println("Usuario no encontrado: " + nombreUsuario);
+            return false;
+        }
+
+        System.out.println("Usuario encontrado: " + usuario.getNombre() + " - esAdmin: " + usuario.EsAdmin());
+        return usuario.EsAdmin();
+    }
+    
 }

@@ -11,9 +11,10 @@ import java.util.ArrayList;
  *
  * @author royum
  */
-public abstract class Administrador extends Usuario {
+public  class Administrador extends Usuario {
     
     private ArrayList<Usuario> listaUsuarios;
+    private static final long serialVersionUID = 1L;
 
     // Constructor
     public Administrador(String nombre, String password) throws IOException {

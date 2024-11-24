@@ -19,99 +19,113 @@ import java.util.Arrays;
  * @author royum
  */
 public class Gestion_Perfil extends JFrame {
-
+    
     private JTree arbol;
     private DefaultTreeModel modeloArbol;
     private File carpeta;
     private File DirectorioActual;
     private JPanel panelArchivos;
     private String nombreUsuario;
+     private File archivoUsuario;//para el archivo binario
 
-    public Gestion_Perfil(File directorioUsuario, String nombre) {
-        this.carpeta = directorioUsuario;
-        this.nombreUsuario = nombre;
+  public Gestion_Perfil(String nombreUsuario) {
+    this.nombreUsuario = nombreUsuario;
 
-        // Configuracion general del frame
-        setTitle("APP RoyXen -> Archivos de " + nombreUsuario);
-        setSize(1000, 700);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
-
-        // Crear un panel izquierdo para el arbol de directorios
-        JPanel panelIzquierdo = new JPanel(new BorderLayout());
-        panelIzquierdo.setPreferredSize(new Dimension(250, 0));
-        panelIzquierdo.setBackground(Color.BLACK);
-
-        // Crear el arbol de directorios
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(carpeta.getName());
-        modeloArbol = new DefaultTreeModel(rootNode);
-        arbol = new JTree(modeloArbol);
-        cargarDirectorio(carpeta, rootNode);
-
-        // Listener para cambios en la seleccion del arbol
-        arbol.addTreeSelectionListener(e -> {
-            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) arbol.getLastSelectedPathComponent();
-            if (selectedNode == null) {
-                DirectorioActual = null;
-                return;
-            }
-
-            String rutaRelativa = getRutaDesdeNodo(selectedNode).trim();
-            File directorioSeleccionado = new File(carpeta, rutaRelativa);
-
-            if (directorioSeleccionado.exists() && directorioSeleccionado.isDirectory()) {
-                DirectorioActual = directorioSeleccionado;
-                mostrarContenidoCarpeta(DirectorioActual);
-            } else {
-                DirectorioActual = null;
-            }
-        });
-
-        JScrollPane scrollTree = new JScrollPane(arbol);
-        scrollTree.setBackground(Color.BLACK);
-        panelIzquierdo.add(scrollTree, BorderLayout.CENTER);
-        add(panelIzquierdo, BorderLayout.WEST);
-
-        //aqui se crea un area central para mostrar archivos
-        panelArchivos = new JPanel();
-        panelArchivos.setLayout(new GridLayout(0, 4, 15, 15));
-        panelArchivos.setBackground(Color.DARK_GRAY);
-        JScrollPane scrollArchivos = new JScrollPane(panelArchivos);
-        add(scrollArchivos, BorderLayout.CENTER);
-
-        // Crear un panel superior para los botones
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelBotones.setBackground(new Color(45, 45, 45));
-
-        JButton agregarButton = new JButton("Agregar Musica");
-        configurarBoton(agregarButton, new Color(120, 180, 180));
-        agregarButton.addActionListener(e -> agregarArchivosMusica());
-        panelBotones.add(agregarButton);
-
-        JButton eliminarButton = new JButton("Eliminar");
-        configurarBoton(eliminarButton, new Color(220, 20, 60));
-        eliminarButton.addActionListener(e -> eliminarArchivo());
-        panelBotones.add(eliminarButton);
-
-        JButton renombrarButton = new JButton("Renombrar");
-        configurarBoton(renombrarButton, new Color(50, 150, 50));
-        renombrarButton.addActionListener(e -> renombrarArchivo());
-        panelBotones.add(renombrarButton);
-
-        JButton Volver = new JButton("Volver");
-        configurarBoton(Volver, new Color(120, 20, 60));
-        Volver.addActionListener(e -> {
-
-            MenuPrincipal menu = new MenuPrincipal(nombreUsuario);
-            menu.setVisible(true);
-            dispose();
-
-        });
-        panelBotones.add(Volver);
-
-        add(panelBotones, BorderLayout.NORTH);
+    // Carpeta raíz de gestión
+    File carpetaUsuariosGestion = new File("UsuariosGestion");
+    if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
+        JOptionPane.showMessageDialog(null, 
+            "La carpeta raíz 'UsuariosGestion' no existe. Por favor, verifica la configuración.");
+        dispose();
+        return;
     }
+
+    // Carpeta del usuario actual
+    carpeta = new File(carpetaUsuariosGestion, nombreUsuario);
+    if (!carpeta.exists() || !carpeta.isDirectory()) {
+        JOptionPane.showMessageDialog(null, 
+            "El usuario \"" + nombreUsuario + "\" no tiene una carpeta asignada. Por favor, verifica el sistema.");
+        dispose();
+        return;
+    }
+
+    // Configuración del JFrame
+    setTitle("APP RoyXen -> Archivos de " + nombreUsuario);
+    setSize(1000, 700);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setLocationRelativeTo(null);
+    setLayout(new BorderLayout());
+
+    // Crear el árbol de directorios
+    JPanel panelIzquierdo = new JPanel(new BorderLayout());
+    panelIzquierdo.setPreferredSize(new Dimension(250, 0));
+    panelIzquierdo.setBackground(Color.BLACK);
+
+    DefaultMutableTreeNode RaizDeNodo = new DefaultMutableTreeNode(carpeta.getName());
+    modeloArbol = new DefaultTreeModel(RaizDeNodo);
+    arbol = new JTree(modeloArbol);
+    cargarDirectorio(carpeta, RaizDeNodo);
+
+    arbol.addTreeSelectionListener(e -> {
+        DefaultMutableTreeNode SeleccionarNodo = (DefaultMutableTreeNode) arbol.getLastSelectedPathComponent();
+        if (SeleccionarNodo == null) {
+            DirectorioActual = null;
+            return;
+        }
+
+        String rutaRelativa = getRutaDesdeNodo(SeleccionarNodo).trim();
+        File directorioSeleccionado = new File(carpeta, rutaRelativa);
+
+        if (directorioSeleccionado.exists() && directorioSeleccionado.isDirectory()) {
+            DirectorioActual = directorioSeleccionado;
+            mostrarContenidoCarpeta(DirectorioActual);
+        } else {
+            DirectorioActual = null;
+        }
+    });
+
+    JScrollPane Scroll_Arbol = new JScrollPane(arbol);
+    Scroll_Arbol.setBackground(Color.BLACK);
+    panelIzquierdo.add(Scroll_Arbol, BorderLayout.CENTER);
+    add(panelIzquierdo, BorderLayout.WEST);
+
+    // Panel de archivos
+    panelArchivos = new JPanel();
+    panelArchivos.setLayout(new GridLayout(0, 4, 15, 15));
+    panelArchivos.setBackground(Color.DARK_GRAY);
+    JScrollPane scrollArchivos = new JScrollPane(panelArchivos);
+    add(scrollArchivos, BorderLayout.CENTER);
+
+    // Panel de botones
+    JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    panelBotones.setBackground(new Color(45, 45, 45));
+
+    JButton agregarButton = new JButton("Agregar Música");
+    configurarBoton(agregarButton, new Color(120, 180, 180));
+    agregarButton.addActionListener(e -> agregarArchivosMusica());
+    panelBotones.add(agregarButton);
+
+    JButton eliminarButton = new JButton("Eliminar");
+    configurarBoton(eliminarButton, new Color(220, 20, 60));
+    eliminarButton.addActionListener(e -> eliminarArchivo());
+    panelBotones.add(eliminarButton);
+
+    JButton renombrarButton = new JButton("Renombrar");
+    configurarBoton(renombrarButton, new Color(50, 150, 50));
+    renombrarButton.addActionListener(e -> renombrarArchivo());
+    panelBotones.add(renombrarButton);
+
+    JButton Volver = new JButton("Volver");
+    configurarBoton(Volver, new Color(120, 20, 60));
+    Volver.addActionListener(e -> {
+        MenuPrincipal menu = new MenuPrincipal(nombreUsuario,archivoUsuario);
+        menu.setVisible(true);
+        dispose();
+    });
+    panelBotones.add(Volver);
+
+    add(panelBotones, BorderLayout.NORTH);
+}
 
     private void configurarBoton(JButton boton, Color color) {
         boton.setForeground(Color.WHITE);
@@ -128,10 +142,10 @@ public class Gestion_Perfil extends JFrame {
         if (archivos != null) {
             Arrays.sort(archivos);
             for (File archivo : archivos) {
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(archivo.getName());
-                node.add(childNode);
+                DefaultMutableTreeNode Nodo_Secundario = new DefaultMutableTreeNode(archivo.getName());
+                node.add(Nodo_Secundario);
                 if (archivo.isDirectory()) {
-                    cargarDirectorio(archivo, childNode);
+                    cargarDirectorio(archivo, Nodo_Secundario);
                 }
             }
         }
@@ -167,7 +181,7 @@ public class Gestion_Perfil extends JFrame {
 
     private void renombrarArchivo() {
         if (DirectorioActual == null || !DirectorioActual.exists()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un directorio o archivo válido.");
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un directorio o archivo valido.");
             return;
         }
 
@@ -178,7 +192,7 @@ public class Gestion_Perfil extends JFrame {
                 JOptionPane.QUESTION_MESSAGE);
 
         if (nombreActual == null || nombreActual.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nombre no válido.");
+            JOptionPane.showMessageDialog(this, "Nombre no valido.");
             return;
         }
 
@@ -221,12 +235,12 @@ public class Gestion_Perfil extends JFrame {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un directorio valido.");
             return;
         }
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setMultiSelectionEnabled(true);
+        JFileChooser SelectorArchivos = new JFileChooser();
+        SelectorArchivos.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        SelectorArchivos.setMultiSelectionEnabled(true);
 
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            for (File archivo : fileChooser.getSelectedFiles()) {
+        if (SelectorArchivos.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            for (File archivo : SelectorArchivos.getSelectedFiles()) {
                 if (archivo.getName().matches(".*\\.(mp3|wav|aac)$")) {
                     try {
                         File destino = new File(DirectorioActual, archivo.getName());
@@ -245,9 +259,9 @@ public class Gestion_Perfil extends JFrame {
     private void copiarArchivo(File fuente, File destino) throws IOException {
         try (InputStream in = new FileInputStream(fuente); OutputStream out = new FileOutputStream(destino)) {
             byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
+            int bytes_leer;
+            while ((bytes_leer = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytes_leer);
             }
         }
     }

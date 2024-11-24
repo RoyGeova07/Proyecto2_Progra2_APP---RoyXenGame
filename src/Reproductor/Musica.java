@@ -21,6 +21,8 @@ public class Musica {
     private static MediaPlayer reproductor;
     private String Titulo,Artista,Album,RutaArchivo;
     private String Duracion;
+    private static MediaPlayer mediaPlayer;
+
     
     public Musica(Media archivo){
         Musica.archivo=archivo;
@@ -81,5 +83,5 @@ public class Musica {
          reproductor.setVolume(volumen);
          
      }
-    
+            
 }

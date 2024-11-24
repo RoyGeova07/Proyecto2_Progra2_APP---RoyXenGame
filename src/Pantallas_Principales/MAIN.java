@@ -15,12 +15,12 @@ public class MAIN {
      */
     public static void main(String[] args) {
         
-        MenuInicio inicio = new MenuInicio();
+        MenuInicio inicio=new MenuInicio();
         inicio.setVisible(true);
         inicio.setLocationRelativeTo(null);
         
     }
         
-    
+        
     
 }

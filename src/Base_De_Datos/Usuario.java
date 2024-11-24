@@ -34,41 +34,6 @@ public class Usuario implements Serializable {
         this.bibliotecaMusical = new ArrayList<>();
         this.bibliotecaJuego = new ArrayList<>();
         this.AreaChat = new ArrayList<>();
-        crearCarpetas();
-
-    }
-
-    private void crearCarpetas() {
-        
-        File carpetaPrincipal=new File(nombre);
-
-        File CarpetaMusica = new File(carpetaPrincipal, "Musica");
-        File CarpetaJuegos = new File(carpetaPrincipal, "Juegos");
-
-        if(!carpetaPrincipal.exists()){
-            carpetaPrincipal.mkdir();
-        }
-        
-        if (!CarpetaMusica.exists()) {
-            CarpetaMusica.mkdir();
-        }
-        if (!CarpetaJuegos.exists()) {
-            CarpetaJuegos.mkdir();
-        }
-
-    }
-
-    public void ListaMusicas() {
-        String mensaje;
-        mensaje = "Biblioteca Musical";
-        bibliotecaMusical.forEach(System.out::println);
-
-    }
-
-
-    public void listarJuegos() {
-        System.out.println("Biblioteca de Juegos:");
-        bibliotecaJuego.forEach(System.out::println);
     }
 
     public String getNombre() {
@@ -94,5 +59,15 @@ public class Usuario implements Serializable {
     public ArrayList<MensajeChat> getAreaChat() {
         return AreaChat;
     }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
 
 }

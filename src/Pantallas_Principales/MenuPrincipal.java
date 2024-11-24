@@ -5,17 +5,17 @@
 package Pantallas_Principales;
 
 import Base_De_Datos.ManejoUsuarios;
+import Base_De_Datos.Usuario;
 import Perfil_De_Usuario.Gestion_Perfil;
+import Reproductor.Musica;
 import Reproductor.VentanaPrincipal;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
-
+import java.awt.event.*;
 
 /**
  *
@@ -35,15 +35,18 @@ public class MenuPrincipal extends JFrame {
     private JButton Administracion;
     private ManejoUsuarios manejoUsuarios;
     private static String nombreUsuario;
+    private File archivoUsuario;//para el archivo binario
+    private Usuario usu;
 
-    public MenuPrincipal(String nombre) {
-        this.nombreUsuario=nombre;
+    public MenuPrincipal(String nombre,File archivoUsuarios) {
+        this.nombreUsuario = nombre;
+        this.archivoUsuario=archivoUsuarios;
         GUI();
-        manejoUsuarios=new ManejoUsuarios();
+        manejoUsuarios = new ManejoUsuarios();
     }
 
     private void GUI() {
-        setTitle("APP RoyXen -> Cuenta de "+nombreUsuario);
+        setTitle("APP RoyXen -> Cuenta de " + nombreUsuario);
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Ventana maximizada
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -57,7 +60,6 @@ public class MenuPrincipal extends JFrame {
         cargarFondo("/img_menuprin/fondo.jpg"); // Cambia a tu GIF aquí
         layeredPane.add(fondo, Integer.valueOf(0)); // Agregar el fondo en la capa más baja
 
-
         // Crear panel de botones
         panelBotones = new JPanel(new GridBagLayout());
         panelBotones.setOpaque(false); // Hacer el panel transparente
@@ -70,7 +72,7 @@ public class MenuPrincipal extends JFrame {
         Discord = crearBoton("Discord", "/img_menuprin/discord1.png");
         Perfil = crearBoton("Mi Perfil", "/img_menuprin/perfil.jpg");
         Cerrar_Sesion = crearBoton("Cerrar Sesion", "/img_menuprin/cerrar_sesion.png");
-        Administracion= crearBoton("Admin","/img_menuprin/administracion1.png");
+        Administracion = crearBoton("Admin", "/img_menuprin/administracion1.png");
 
         // Añadir botones al panel
         GridBagConstraints gbc = new GridBagConstraints();
@@ -87,15 +89,15 @@ public class MenuPrincipal extends JFrame {
         panelBotones.add(Discord, gbc);
 
         //aqui segunda fila
-        gbc.gridx=0;
-        gbc.gridy=1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panelBotones.add(Perfil, gbc);
-        
-        gbc.gridx=1;
-        panelBotones.add(Cerrar_Sesion,gbc);
-        
-        gbc.gridx=2;
-        panelBotones.add(Administracion,gbc);
+
+        gbc.gridx = 1;
+        panelBotones.add(Cerrar_Sesion, gbc);
+
+        gbc.gridx = 2;
+        panelBotones.add(Administracion, gbc);
 
         // Redimensionar el fondo y los componentes al cambiar tamaño de la ventana
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -106,29 +108,27 @@ public class MenuPrincipal extends JFrame {
                 panelBotones.setBounds(getWidth() / 4, getHeight() / 3, getWidth() / 2, getHeight() / 3);
             }
         });
-        
-        Juegos.addActionListener(e-> {
-            
+
+        Juegos.addActionListener(e -> {
+
             //AGREGA INSTANCIA JUEGO
-            
         });
-        
-        Musicas.addActionListener(e-> cargarReproductorMusica(this));
-        
+
+        Musicas.addActionListener(e -> cargarReproductorMusica(this));
+
         Discord.addActionListener(e -> {
 
             //AGREGAR INSTANCIA DISCORD
-            
         });
 
         Perfil.addActionListener(e -> {
 
             if (nombreUsuario != null && !nombreUsuario.isEmpty()) {
                 // Construimos la ruta en base al directorio actual y al nombre de usuario
-                File carpetaUsuario = new File(System.getProperty("user.dir") + File.separator + nombreUsuario);
+                File carpetaUsuario = new File(System.getProperty("user.dir") + File.separator + "UsuariosGestion"+ File.separator+ nombreUsuario);
                 if (carpetaUsuario.exists()) {
                     // Si la carpeta existe, abrimos el perfil
-                    Gestion_Perfil navegador = new Gestion_Perfil(carpetaUsuario,nombreUsuario);
+                    Gestion_Perfil navegador = new Gestion_Perfil(nombreUsuario);
                     navegador.setVisible(true);
                     dispose();
                 } else {
@@ -138,13 +138,49 @@ public class MenuPrincipal extends JFrame {
                 JOptionPane.showMessageDialog(null, "Error: El nombre de usuario es nulo o vacio.");
             }
 
-            
         });
 
         Administracion.addActionListener(e -> {
+        
+            String UsuarioIngresado = JOptionPane.showInputDialog(null,
+                    "Ingrese el nombre del usuario para ingresar a sus carpetas",
+                    "Verificación Usuario",
+                    JOptionPane.PLAIN_MESSAGE);
 
-            //AGREGAR INSTANCIA DE ADMINISTRACION 
-            
+            if (UsuarioIngresado != null && !UsuarioIngresado.trim().isEmpty()) {
+                if (manejoUsuarios.ObtenerUsuario(UsuarioIngresado) != null) {
+                    if (manejoUsuarios.esAdmin(UsuarioIngresado)) {
+                        JOptionPane.showMessageDialog(null,
+                                "Bienvenido a las carpetas de " + UsuarioIngresado + "!");
+
+                       
+                        File DirectorioAdmin = new File(System.getProperty("user.dir")
+                                + File.separator + "UsuariosGestion"
+                                + File.separator + UsuarioIngresado);
+
+                     
+                        PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, UsuarioIngresado, archivoUsuario);
+                        adminPanel.setVisible(true);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "No eres administrador. No tienes permiso para acceder.",
+                                "Acceso Denegado",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    // Mensaje si el usuario no existe
+                    JOptionPane.showMessageDialog(null,
+                            "El usuario ingresado no existe.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "No ingresaste ningun nombre de usuario.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         Cerrar_Sesion.addActionListener(e -> {
@@ -154,15 +190,16 @@ public class MenuPrincipal extends JFrame {
             dispose();
 
         });
+        
+        
 
     }
 
     private void cargarFondo(String ruta) {
         try {
-            
+
             ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
 
-            
             Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
 
             // Usar el icono escalado en el JLabel
@@ -212,38 +249,7 @@ public class MenuPrincipal extends JFrame {
     }
 
     //aqui funcion para acceder al reproductor de musica desde un panel especial
-   public void cargarReproductorMusica(MenuPrincipal menuPrincipal) {
-       
-        // HACER ES FUNCION FUE UN DOLOR DE HUEVOSSSSS MERECE SU EXPLICACION
-        
-        // por usar javafx me complicaba, por que usar static en varias funciones
-        // el problema era que por ser static solo se podian usar solo una vez osea
-        // cuando cerraba el frame y volvia abrirlo ya no aparecia nada, estuve 2 horas
-        // soluciando es mmamada pero se LOGRO, lo que paso fue es que tuve la excelente 
-        // idea de cuando solo ocultar el cuando le daba a la x, y cuando volvia a usar el 
-        // reproducto volvia aparecer y no salia en blanco y ya funciona correctamente.
-        
-        // EXPLICACION MAS SERIA:
-        //Ocultar el reproductor con setVisible(false) puede funcionar para lograr 
-        // que el reproductor "desaparezca" sin destruir la instancia. De este modo, 
-        //al hacer setVisible(true), el reproductor volvera a aparecer con todos sus componentes 
-        //(incluido el boton de "reiniciar") intactos. Esto es menos costoso en terminos 
-        //de recursos que crear una nueva instancia cada vez y debería conservar el estado
-        //de los elementos de la interfaz.
-        
-        //Primera vez: Si reproductorFrame es null, el metodo creara y mostrara el reproductor.
-        
-        //Subsecuentes veces: Si reproductorFrame ya existe, simplemente se vuelve visible 
-        //con setVisible(true).
-        
-        //Ocultarlo: Al cerrar con la "X" o al usar el boton de "salir" en el menu, 
-        //solo se ocultara el reproductor (HIDE_ON_CLOSE).
-        
-        //Con esta solucion, cargarReproductorMusica siempre "revive" la misma instancia, 
-        //conservando el boton de "reiniciar" y cualquier otra configuracion que tenga 
-        //el reproductor en su estado inicial.
-        // FIN.........
-        
+    public void cargarReproductorMusica(MenuPrincipal menuPrincipal) {
         if (reproductorFrame != null) {
             reproductorFrame.setVisible(true); // Volver a mostrar la ventana
         } else {
@@ -261,14 +267,35 @@ public class MenuPrincipal extends JFrame {
             });
 
             reproductorFrame = new JFrame("APP RoyXen -> Reproductor de Musica de " + nombreUsuario);
-            reproductorFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE); // Ocultarlo en lugar de cerrarlo
+            reproductorFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // No cerrar automáticamente
+
+            // Añadir listener para manejar el cierre manualmente
+            reproductorFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    int confirm = JOptionPane.showConfirmDialog(
+                            reproductorFrame,
+                            "¿Estas seguro de que deseas cerrar el reproductor? si tienes musica en reproduccion esto detendra la musica.",
+                            "Cerrar Reproductor de " + nombreUsuario,
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        detenerMusica();
+                        reproductorFrame.setVisible(false); // Ocultar la ventana
+                    }
+                }
+            });
+
             reproductorFrame.getContentPane().add(jfxPanel);
             reproductorFrame.pack();
             reproductorFrame.setLocationRelativeTo(null);
             reproductorFrame.setVisible(true);
         }
     }
+
+    private void detenerMusica() {
+
+        Musica.stop();
+    }
+
 }
-
-
-

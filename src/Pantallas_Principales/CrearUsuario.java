@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  *
@@ -24,6 +25,7 @@ public class CrearUsuario extends JFrame {
     private JButton cancelar;
     private JButton volver;
     private ManejoUsuarios manejoUsuarios;
+    private File archivoUsuario;//para el archivo binario
 
     public CrearUsuario() {
         manejoUsuarios = new ManejoUsuarios();
@@ -103,7 +105,7 @@ public class CrearUsuario extends JFrame {
                     JOptionPane.showMessageDialog(null, "Usuario creado exitosamente:\n"
                             + "Nombre: " + nombre + "\nAdministrador: " + (esAdmin ? "Sí" : "No"));
                     limpiarCampos();
-                    new MenuPrincipal(nombre).setVisible(true);
+                    new MenuPrincipal(nombre,archivoUsuario).setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "El usuario ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
