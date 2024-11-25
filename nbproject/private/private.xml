@@ -2,6 +2,19 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Reproductor/ArchivosUsuarios.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Perfil_De_Usuario/Gestion_Perfil.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Base_De_Datos/Administrador.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Base_De_Datos/ManejoUsuarios.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Base_De_Datos/Usuario.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/LogIn.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/MAIN.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/PantallaAdmin.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/MenuPrincipal.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/CrearUsuario.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Base_De_Datos/ManejoDeDatos.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/MenuInicio.java</file>
+        </group>
     </open-files>
 </project-private>
