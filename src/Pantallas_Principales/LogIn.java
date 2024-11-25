@@ -90,7 +90,7 @@ public class LogIn extends JFrame {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 if (manejoUsuarios.ValidarCredenciales(usuario, password)) {
-                    JOptionPane.showMessageDialog(null, "Bienvenido, usuario normal " + usuario + "!"); 
+                    JOptionPane.showMessageDialog(null, "Bienvenido, usuario " + usuario + "!"); 
                     
                     new MenuPrincipal(usuario,archivoUsuario).setVisible(true);
                     dispose();

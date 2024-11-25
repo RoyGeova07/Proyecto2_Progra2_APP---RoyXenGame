@@ -159,9 +159,9 @@ public class MenuPrincipal extends JFrame {
                                 + File.separator + UsuarioIngresado);
 
                      
-                        PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, UsuarioIngresado, archivoUsuario);
+                        PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin,this,archivoUsuario);
                         adminPanel.setVisible(true);
-                        dispose();
+                        this.setVisible(false);
                     } else {
                         JOptionPane.showMessageDialog(null,
                                 "No eres administrador. No tienes permiso para acceder.",

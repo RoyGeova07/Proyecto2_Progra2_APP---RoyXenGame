@@ -32,13 +32,14 @@ public class PantallaAdmin extends JFrame {
     private String nombreUsuario;
     private File archivoUsuario;//para el archivo binario
     private File archivoNuevo;
+    private MenuPrincipal menuPrincipal;
 
-    public PantallaAdmin(File rootDirectory, String nombreUsuario, File archivoBinario) {
+    public PantallaAdmin(File rootDirectory,MenuPrincipal menuPrincipal, File archivoBinario) {
         this.rutaDirectorio = rootDirectory;
-        this.nombreUsuario = nombreUsuario;
         this.archivoUsuario=archivoBinario;
+        this.menuPrincipal=menuPrincipal;
 
-        setTitle("Panel Admin de " + nombreUsuario);
+        setTitle("Panel Admin ");
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -47,10 +48,10 @@ public class PantallaAdmin extends JFrame {
         // Panel Izquierdo: Arbol de directorios
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setPreferredSize(new Dimension(300, 0));
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootDirectory.getName());
-        arbolmodelo = new DefaultTreeModel(rootNode);
+        DefaultMutableTreeNode nodoRaiz = new DefaultMutableTreeNode(rootDirectory.getName());
+        arbolmodelo = new DefaultTreeModel(nodoRaiz);
         arbol = new JTree(arbolmodelo);
-        Cargar_Directorio(rootDirectory, rootNode);
+        Cargar_Directorio(rootDirectory, nodoRaiz);
 
         arbol.addTreeSelectionListener(this::en_Selección_De_Arbol);
 
@@ -71,7 +72,7 @@ public class PantallaAdmin extends JFrame {
 
         // Panel Superior: Botones
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton addButton = createButton("Agregar Música", "add", e -> Agregarmusica());
+        JButton addButton = createButton("Agregar Musica", "add", e -> Agregarmusica());
         JButton deleteButton = createButton("Eliminar", "delete", e -> borrar());
         JButton renameButton = createButton("Renombrar", "rename", e -> renombrar_Archivo(archivoNuevo,nombreUsuario));
         JButton backButton = createButton("Volver", "back", e -> backToMenu());
@@ -158,13 +159,13 @@ public class PantallaAdmin extends JFrame {
             return;
         }
 
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de música", "mp3", "wav", "aac"));
+        JFileChooser ArchivoElegir = new JFileChooser();
+        ArchivoElegir.setMultiSelectionEnabled(true);
+        ArchivoElegir.setFileFilter(new FileNameExtensionFilter("Archivos de musica", "mp3", "wav", "aac","m4a"));
 
-        int result = fileChooser.showOpenDialog(this);
+        int result = ArchivoElegir.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            for (File file : fileChooser.getSelectedFiles()) {
+            for (File file : ArchivoElegir.getSelectedFiles()) {
                 try {
                     File destFile = new File(directorioActual, file.getName());
                     copiar_archivo(file, destFile);
@@ -177,11 +178,11 @@ public class PantallaAdmin extends JFrame {
         }
     }
 
-    private void copiar_archivo(File source, File destination) throws IOException {
-        try (InputStream in = new FileInputStream(source); OutputStream out = new FileOutputStream(destination)) {
+    private void copiar_archivo(File fuente, File destino) throws IOException {
+        try (InputStream entra = new FileInputStream(fuente); OutputStream out = new FileOutputStream(destino)) {
             byte[] buffer = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(buffer)) != -1) {
+            while ((bytesRead = entra.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
             }
         }
@@ -189,29 +190,29 @@ public class PantallaAdmin extends JFrame {
 
     private void borrar() {
         if (directorioActual == null || !directorioActual.exists()) {
-            log("Directorio no válido seleccionado.");
+            log("Directorio no valido seleccionado.");
             return;
         }
 
-        File[] files = directorioActual.listFiles();
-        if (files == null || files.length == 0) {
-            log("El directorio está vacío. No hay nada que eliminar.");
+        File[] archivitos = directorioActual.listFiles();
+        if (archivitos == null || archivitos.length == 0) {
+            log("El directorio esta vacio. No hay nada que eliminar.");
             return;
         }
 
-        String fileName=JOptionPane.showInputDialog(this, "Ingrese el nombre del archivo o carpeta a eliminar:");
-        if (fileName!=null && !fileName.trim().isEmpty()) {
-            File file = new File(directorioActual, fileName);
+        String nombre_de_Archivitos=JOptionPane.showInputDialog(this, "Ingrese el nombre del archivo o carpeta a eliminar:");
+        if (nombre_de_Archivitos!=null && !nombre_de_Archivitos.trim().isEmpty()) {
+            File file = new File(directorioActual, nombre_de_Archivitos);
 
             if (file.exists()) {
                 if (borrar_recursivo(file)) {
-                    log("Eliminado exitosamente: " + fileName);
+                    log("Eliminado exitosamente: " + nombre_de_Archivitos);
                     mostrar_ArchivosEn_Directorio(directorioActual);
                 } else {
-                    log("No se pudo eliminar: " + fileName);
+                    log("No se pudo eliminar: " + nombre_de_Archivitos);
                 }
             } else {
-                log("El archivo o carpeta no existe: " + fileName);
+                log("El archivo o carpeta no existe: " + nombre_de_Archivitos);
             }
         }
     }
@@ -233,28 +234,6 @@ public class PantallaAdmin extends JFrame {
         return file.delete();
         
     }
-    
-   
-    
-    private boolean deleteDirectory(File directory){
-        
-        if(directory.isDirectory()){
-            
-            File[] archivos=directory.listFiles();
-            if(archivos!=null){
-                
-                for (File archivo : archivos) {
-                    deleteDirectory(archivo);
-                }
-                
-            }
-            
-        }
-        return directory.delete();
-        
-    }
-    
-  
     
     private void crearFolder_Archivo() {
         if (directorioActual == null || !directorioActual.exists()) {
@@ -327,7 +306,7 @@ public class PantallaAdmin extends JFrame {
     }
 
     private void backToMenu() {
-        new MenuPrincipal(nombreUsuario,archivoUsuario).setVisible(true);
+        menuPrincipal.setVisible(true);
         dispose();
     }
 

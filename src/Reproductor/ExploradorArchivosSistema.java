@@ -25,12 +25,12 @@ public class ExploradorArchivosSistema {
         escenario=new Stage();
         explorador=new FileChooser();
         explorador.setTitle("Selecciona cancion");
-        ExtensionFilter filtro=new ExtensionFilter("Audios","*wav", "*.mp3", ".acc",".m4a");
-        explorador.getExtensionFilters().add(filtro);//este nos devuelve una lista 
+        ExtensionFilter filtro=new ExtensionFilter("Audios","*wav", "*.mp3", "*.acc","*.m4a");
+        explorador.getExtensionFilters().add(filtro);//este nos devuelve una lista  
     }
     
     public static void SeleccionarArchivo(){
-        try{
+        try{    
             
         File archivo = explorador.showOpenDialog(escenario);//este nos devuelve un file 
         Media archivoSonido=new Media(archivo.toURI().toString());
