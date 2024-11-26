@@ -69,7 +69,7 @@ public class MenuPrincipal extends JFrame {
         panelBotones.setBounds(getWidth() / 4, getHeight() / 3, getWidth() / 2, getHeight() / 3);
         layeredPane.add(panelBotones, Integer.valueOf(1)); // Agregar los botones en una capa superior
 
-        // Crear botones con imágenes
+        // Crear botones con imagenes
         Juegos = crearBoton("Juegos", "/img_menuprin/juego.png");
         Musicas = crearBoton("Reproductor", "/img_menuprin/musica1.png");
         Discord = crearBoton("Discord", "/img_menuprin/discord1.png");
@@ -151,33 +151,35 @@ public class MenuPrincipal extends JFrame {
         });
 
         Administracion.addActionListener(e -> {
-        
+            
+            String usuarioEnSesion= nombreUsuario;
+            
+            if(!manejoUsuarios.esAdmin(usuarioEnSesion)){
+                JOptionPane.showMessageDialog(null, "No eres admin Acceso denegado!","Informacion",JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            
             String UsuarioIngresado = JOptionPane.showInputDialog(null,
                     "Ingrese el nombre del usuario para ingresar a sus carpetas",
                     "Verificación Usuario",
                     JOptionPane.PLAIN_MESSAGE);
 
             if (UsuarioIngresado != null && !UsuarioIngresado.trim().isEmpty()) {
-                if (manejoUsuarios.ObtenerUsuario(UsuarioIngresado) != null) {
-                    if (manejoUsuarios.esAdmin(UsuarioIngresado)) {
-                        JOptionPane.showMessageDialog(null,
-                                "Bienvenido a las carpetas de " + UsuarioIngresado + "!");
 
-                       
-                        File DirectorioAdmin = new File(System.getProperty("user.dir")
-                                + File.separator + "UsuariosGestion"
-                                + File.separator + UsuarioIngresado);
+                Usuario usuario = manejoUsuarios.ObtenerUsuario(UsuarioIngresado);
+                if (usuario != null) {
 
-                     
-                        PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin,this,archivoUsuario);
-                        adminPanel.setVisible(true);
-                        this.setVisible(false);
-                    } else {
-                        JOptionPane.showMessageDialog(null,
-                                "No eres administrador. No tienes permiso para acceder.",
-                                "Acceso Denegado",
-                                JOptionPane.WARNING_MESSAGE);
-                    }
+                    JOptionPane.showMessageDialog(null,
+                            "Bienvenido a las carpetas de " + UsuarioIngresado + "!");
+
+                    File DirectorioAdmin = new File(System.getProperty("user.dir")
+                            + File.separator + "UsuariosGestion"
+                            + File.separator + UsuarioIngresado);
+
+                    PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, this, archivoUsuario);
+                    adminPanel.setVisible(true);
+                    this.setVisible(false);
+
                 } else {
                     // Mensaje si el usuario no existe
                     JOptionPane.showMessageDialog(null,

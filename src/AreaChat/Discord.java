@@ -244,7 +244,7 @@ public class Discord extends JFrame{
     
     private void mostrarHistorial() throws IOException{
         
-        JFrame ventanaHistorial=new JFrame("Historal de mensajes de "+usuarioEnSesion);
+        JFrame ventanaHistorial=new JFrame("APP RoyXen -> Historal de mensajes de "+usuarioEnSesion);
         ventanaHistorial.setSize(450,650);
         ventanaHistorial.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventanaHistorial.setLayout(new BorderLayout());
