@@ -16,7 +16,7 @@ import java.io.File;
  * @author royum
  */
 public class CrearUsuario extends JFrame {
-    
+
 
     private JTextField nombreField;
     private JPasswordField passwordField;
@@ -25,7 +25,8 @@ public class CrearUsuario extends JFrame {
     private JButton cancelar;
     private JButton volver;
     private ManejoUsuarios manejoUsuarios;
-    private File archivoUsuario;//para el archivo binario
+    private File archivoUsuario; // Para el archivo binario
+    private JLabel fondo;
 
     public CrearUsuario() {
         manejoUsuarios = new ManejoUsuarios();
@@ -37,62 +38,68 @@ public class CrearUsuario extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
+        // Configurar fondo
+        fondo = new JLabel();
+        fondo.setLayout(new GridBagLayout()); // Para centrar elementos sobre el fondo
+        cargarFondo("/img_menuprin/fondo4.gif");
+        setContentPane(fondo); // Establecer el fondo como panel principal
+
         // Panel principal
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setOpaque(false); // Transparente para que el fondo sea visible
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(new Color(240, 248, 255));
 
-        // titulo
+        // Título
         JLabel tituloLabel = new JLabel("Crear Usuario");
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        tituloLabel.setForeground(new Color(0, 102, 204));
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        tituloLabel.setForeground(Color.LIGHT_GRAY);
         tituloLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(tituloLabel);
         mainPanel.add(Box.createVerticalStrut(20));
 
         // Campo de Nombre
         JPanel nombrePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        nombrePanel.setBackground(mainPanel.getBackground());
+        nombrePanel.setOpaque(false); // Transparente
         JLabel nombreLabel = new JLabel("Nombre:");
+        nombreLabel.setFont(new Font("Arial", Font.BOLD, 17));
+        nombreLabel.setForeground(Color.LIGHT_GRAY);
         nombreField = new JTextField(15);
+        nombreField.setFont(new Font("Arial", Font.PLAIN, 17));
         nombrePanel.add(nombreLabel);
         nombrePanel.add(nombreField);
         mainPanel.add(nombrePanel);
 
         // Campo de Contraseña
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        passwordPanel.setBackground(mainPanel.getBackground());
+        passwordPanel.setOpaque(false); // Transparente
         JLabel passwordLabel = new JLabel("Contraseña:");
+        passwordLabel.setFont(new Font("Arial", Font.BOLD, 17));
+        passwordLabel.setForeground(Color.LIGHT_GRAY);
         passwordField = new JPasswordField(15);
+        passwordField.setFont(new Font("Arial", Font.PLAIN, 17));
+        passwordField.setForeground(Color.BLACK);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
         mainPanel.add(passwordPanel);
 
         // CheckBox de Administrador
         JPanel adminPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        adminPanel.setBackground(mainPanel.getBackground());
+        adminPanel.setOpaque(false); // Transparente
         adminCheckBox = new JCheckBox("¿Es administrador?");
-        adminCheckBox.setBackground(adminPanel.getBackground());
+        adminCheckBox.setFont(new Font("Arial", Font.BOLD, 17));
+        adminCheckBox.setForeground(Color.LIGHT_GRAY);
+        adminCheckBox.setOpaque(false); // Transparente
         adminPanel.add(adminCheckBox);
         mainPanel.add(adminPanel);
 
         // Botones
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        buttonPanel.setBackground(mainPanel.getBackground());
-        crearUsuario = crearBoton("Crear");
-        cancelar = crearBoton("Cancelar");
-        volver = crearBoton("Volver");
-        buttonPanel.add(crearUsuario);
-        buttonPanel.add(cancelar);
-        buttonPanel.add(volver);
-        mainPanel.add(Box.createVerticalStrut(20));
-        mainPanel.add(buttonPanel);
+        mainPanel.add(Box.createVerticalStrut(20)); // Espaciado
+        mainPanel.add(crearPanelBotones()); // Agregar panel de botones
 
-        // Agregar el panel principal
-        add(mainPanel);
+        fondo.add(mainPanel); // Agregar el panel principal al fondo
 
-        // Eventos de Botones
+        // Eventos de botones
         crearUsuario.addActionListener(e -> {
             String nombre = nombreField.getText();
             String password = new String(passwordField.getPassword());
@@ -105,7 +112,7 @@ public class CrearUsuario extends JFrame {
                     JOptionPane.showMessageDialog(null, "Usuario creado exitosamente:\n"
                             + "Nombre: " + nombre + "\nAdministrador: " + (esAdmin ? "Sí" : "No"));
                     limpiarCampos();
-                    new MenuPrincipal(nombre,archivoUsuario).setVisible(true);
+                    new MenuPrincipal(nombre, archivoUsuario).setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "El usuario ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -121,14 +128,55 @@ public class CrearUsuario extends JFrame {
         });
     }
 
+    private JPanel crearPanelBotones() {
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 10, 10)); // 1 fila, 3 columnas
+        buttonPanel.setOpaque(false); // Transparente
+
+        crearUsuario = crearBoton("Crear");
+        cancelar = crearBoton("Cancelar");
+        volver = crearBoton("Volver");
+
+        // Agregar botones al panel
+        buttonPanel.add(crearUsuario);
+        buttonPanel.add(cancelar);
+        buttonPanel.add(volver);
+
+        return buttonPanel;
+    }
+
     private JButton crearBoton(String texto) {
         JButton boton = new JButton(texto);
-        boton.setFont(new Font("Arial", Font.BOLD, 14));
-        boton.setBackground(new Color(0, 153, 204));
+        boton.setFont(new Font("Consolas", Font.BOLD, 14)); // Tamaño reducido
+        boton.setPreferredSize(new Dimension(130, 40)); // Tamaño ajustado
+        boton.setBackground(Color.BLUE);
         boton.setForeground(Color.WHITE);
         boton.setFocusPainted(false);
-        boton.setPreferredSize(new Dimension(120, 40));
+        boton.setBorder(BorderFactory.createLineBorder(new Color(0, 122, 204), 2, true));
+
+        // Efecto de hover (cambiar color al pasar el mouse)
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(true);
+                boton.setBackground(new Color(0, 0, 0, 50)); // Negro con transparencia
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton.setBackground(Color.BLUE);
+            }
+        });
         return boton;
+    }
+
+    private void cargarFondo(String ruta) {
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
+            Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT); // Escala el GIF
+            fondo.setIcon(new ImageIcon(img));
+            fondo.setHorizontalAlignment(SwingConstants.CENTER); // Centra el GIF
+            fondo.setVerticalAlignment(SwingConstants.CENTER);
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el fondo: " + ruta);
+        }
     }
 
     private void limpiarCampos() {
@@ -136,5 +184,4 @@ public class CrearUsuario extends JFrame {
         passwordField.setText("");
         adminCheckBox.setSelected(false);
     }
-
 }

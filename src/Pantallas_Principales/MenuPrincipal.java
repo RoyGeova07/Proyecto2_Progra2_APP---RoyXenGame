@@ -61,7 +61,6 @@ public class MenuPrincipal extends JFrame {
         // Fondo personalizado
         fondo = new JLabel();
         fondo.setBounds(0, 0, getWidth(), getHeight()); // Tamaño inicial del fondo
-        cargarFondo("/img_menuprin/fondo.jpg"); // Cambia a tu GIF aquí
         layeredPane.add(fondo, Integer.valueOf(0)); // Agregar el fondo en la capa más baja
 
         // Crear panel de botones
@@ -108,7 +107,7 @@ public class MenuPrincipal extends JFrame {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
                 fondo.setBounds(0, 0, getWidth(), getHeight());
-                cargarFondo("/img_menuprin/fondo.jpg");
+                cargarFondo("/img_menuprin/b.gif");
                 panelBotones.setBounds(getWidth() / 4, getHeight() / 3, getWidth() / 2, getHeight() / 3);
             }
         });
@@ -206,19 +205,18 @@ public class MenuPrincipal extends JFrame {
 
     }
 
-    private void cargarFondo(String ruta) {
+     private void cargarFondo(String ruta) {
         try {
-
             ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
-
-            Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
-
-            // Usar el icono escalado en el JLabel
+            Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT); // Escala el GIF
             fondo.setIcon(new ImageIcon(img));
+            fondo.setHorizontalAlignment(SwingConstants.CENTER); // Centra el GIF
+            fondo.setVerticalAlignment(SwingConstants.CENTER);
         } catch (Exception e) {
             System.out.println("No se pudo cargar el fondo: " + ruta);
         }
     }
+
 
     private JButton crearBoton(String texto, String rutaIcono) {
         JButton boton = new JButton(texto);

@@ -31,7 +31,7 @@ public class MenuInicio extends JFrame {
     private void configurarVentana() {
         setTitle("APP RoyXen -> Menu Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600); // Tamaño predeterminado de la ventana
+        setSize(470, 280); // Tamaño predeterminado de la ventana
         setLocationRelativeTo(null); // Centrado en pantalla
         setResizable(false); // Evita que se redimensione
     }
@@ -44,7 +44,7 @@ public class MenuInicio extends JFrame {
         // Fondo de pantalla
         fondo = new JLabel();
         fondo.setLayout(new GridBagLayout()); // Permite centrar los botones
-        cargarFondo("/img_menuprin/im.jpg"); 
+        cargarFondo("/img_menuprin/fondo3.gif"); 
         panelPrincipal.add(fondo, BorderLayout.CENTER);
 
         // Crear los botones
@@ -97,9 +97,8 @@ public class MenuInicio extends JFrame {
 
     private void cargarFondo(String ruta) {
         try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
-            Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
-            fondo.setIcon(new ImageIcon(img));
+            ImageIcon gifIcon = new ImageIcon(getClass().getResource(ruta));
+            fondo.setIcon(gifIcon); 
         } catch (Exception e) {
             System.out.println("No se pudo cargar el fondo: " + ruta);
         }
@@ -109,7 +108,7 @@ public class MenuInicio extends JFrame {
         JButton boton = new JButton(texto);
         boton.setFont(new Font("Consolas", Font.BOLD, 16));
         boton.setPreferredSize(new Dimension(200, 50));
-        boton.setBackground(new Color(45, 137, 239));
+        boton.setBackground(Color.BLUE);
         boton.setForeground(Color.WHITE);
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createLineBorder(new Color(0, 122, 204), 2, true));
@@ -117,11 +116,12 @@ public class MenuInicio extends JFrame {
         // Efecto de hover (cambiar color al pasar el mouse)
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                boton.setBackground(new Color(0, 122, 204));
+                boton.setContentAreaFilled(true); // Permite mostrar el color transparente.
+                boton.setBackground(new Color(0, 0, 0, 50)); // Negro con 50/255 de transparencia.
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                boton.setBackground(new Color(45, 137, 239));
+                boton.setBackground(Color.BLUE);
             }
         });
         return boton;
