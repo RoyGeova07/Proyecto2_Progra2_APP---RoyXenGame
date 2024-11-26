@@ -107,7 +107,7 @@ public class MenuPrincipal extends JFrame {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
                 fondo.setBounds(0, 0, getWidth(), getHeight());
-                cargarFondo("/img_menuprin/b.gif");
+                cargarFondo("/img_menuprin/h.gif");
                 panelBotones.setBounds(getWidth() / 4, getHeight() / 3, getWidth() / 2, getHeight() / 3);
             }
         });
