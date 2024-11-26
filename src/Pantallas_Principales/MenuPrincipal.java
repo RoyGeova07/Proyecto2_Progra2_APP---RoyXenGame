@@ -17,6 +17,9 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import java.awt.event.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -112,16 +115,21 @@ public class MenuPrincipal extends JFrame {
 
         Juegos.addActionListener(e -> {
 
-            //AGREGA INSTANCIA JUEGO
+            //AGREGAR INSTANCIA JUEGO
+            
         });
 
         Musicas.addActionListener(e -> cargarReproductorMusica(this));
 
         Discord.addActionListener(e -> {
 
-            Discord dis=new Discord(nombreUsuario);
-            dis.setVisible(true);
-            dispose();
+            try {
+                Discord dis=new Discord(nombreUsuario);
+                dis.setVisible(true);
+                dispose();
+            } catch (IOException ex) {
+                Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
         Perfil.addActionListener(e -> {

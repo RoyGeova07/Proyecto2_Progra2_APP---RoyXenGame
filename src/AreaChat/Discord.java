@@ -63,9 +63,10 @@ public class Discord extends JFrame{
         //aqui el panelInferior para escribir
         JPanel Panelinferior=new JPanel(new BorderLayout());
         campoMensaje=new JTextField();
-        JButton botonEnviar=new JButton("Enviar");
-        JButton botonVolver=new JButton("Volver");
-        JButton botonHistorial=new JButton("Ver tu historial");
+        
+        JButton botonEnviar = crearBoton("Enviar", "/img_Discord/enviar.png");
+        JButton botonVolver = crearBoton("Volver", "/img_Discord/volver.png");
+        JButton botonHistorial = crearBoton("Historial", "/img_Discord/historial.png");
         
         //aqui las acciones 
         botonEnviar.addActionListener(e-> {
@@ -99,6 +100,45 @@ public class Discord extends JFrame{
         setVisible(true);
         
         
+    }
+    
+    private JButton crearBoton(String texto, String rutaIcono) {
+        JButton boton = new JButton(texto);
+
+        // Cargar el icono.
+        try {
+            ImageIcon icono = new ImageIcon(getClass().getResource(rutaIcono));
+            Image img = icono.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño del icono.
+            boton.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el icono: " + rutaIcono);
+        }
+
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.BOTTOM);
+        boton.setFont(new Font("Consolas", Font.PLAIN, 12));
+        boton.setPreferredSize(new Dimension(100, 100));
+
+        // Transparencia en reposo.
+        boton.setContentAreaFilled(false); // Quitar el fondo en reposo.
+        boton.setOpaque(false);           // Garantizar la transparencia.
+        boton.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 50))); // Borde transparente claro.
+
+        // Cambiar el color al hacer clic.
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(true); // Fondo visible al hacer clic.
+                boton.setBackground(new Color(200, 200, 200, 100)); // Color suave al presionar.
+            }
+
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(false); // Regresar a transparente.
+            }
+        });
+
+        boton.setForeground(Color.black); // Mantener el texto blanco para visibilidad.
+
+        return boton;
     }
     
     private void EnviarMensaje() throws IOException{
@@ -208,7 +248,8 @@ public class Discord extends JFrame{
         ventanaHistorial.setSize(450,650);
         ventanaHistorial.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventanaHistorial.setLayout(new BorderLayout());
-
+        ventanaHistorial.setLocationRelativeTo(null);
+        
         JTextArea AreaHistorial=new JTextArea();
         AreaHistorial.setEditable(false);
         AreaHistorial.setFont(new Font("Monospaced",Font.PLAIN,12));
