@@ -17,18 +17,18 @@ import javafx.scene.layout.HBox;
  */
 public class Botones extends HBox{
     
-    private Button play, pause, stop;
+    private Button play1, pause1, stop1;
     private Slider controladorVolumen;
     private Label etVolumen; 
     
     public Botones(){
         this.setAlignment(Pos.CENTER);//se alinean al centro
-        play=new Button();
-        pause=new Button();
-        stop=new Button();
-        EstiloBoton(play, "play");
-        EstiloBoton(pause, "pause");
-        EstiloBoton(stop, "stop");
+        play1=new Button();
+        pause1=new Button();
+        stop1=new Button();
+        EstiloBoton(play1, "play1");
+        EstiloBoton(pause1, "pause1");
+        EstiloBoton(stop1, "stop1");
         
         //de 0 a 100 y comienza en 50
         controladorVolumen=new Slider(0,100,50);
@@ -44,7 +44,7 @@ public class Botones extends HBox{
     
     private void MontarBotones() {
         //este nos devuelve una lista de todos los componentes que tenemos, todos los nodos 
-        getChildren().addAll(stop,play,pause);
+        getChildren().addAll(stop1,play1,pause1);
         
     }
                                           //nombre boton
@@ -68,9 +68,9 @@ public class Botones extends HBox{
     private void PonerenAccion() {
         
         
-       play.setOnAction(e-> Musica.Play());
-       pause.setOnAction(e-> Musica.pause());
-       stop.setOnAction(e-> Musica.stop());
+       play1.setOnAction(e-> Musica.Play());
+       pause1.setOnAction(e-> Musica.pause());
+       stop1.setOnAction(e-> Musica.stop());
        
        
     }

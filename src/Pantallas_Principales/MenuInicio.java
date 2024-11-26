@@ -50,7 +50,7 @@ public class MenuInicio extends JFrame {
         // Crear los botones
         botonCrearUsuario = crearBoton("Crear Usuario");
         botonIniciarSesion = crearBoton("Iniciar Sesion");
-        botonCerrarAplicacion = crearBoton("Cerrar Aplicación");
+        botonCerrarAplicacion = crearBoton("Cerrar Aplicacion");
 
         // Añadir los botones al fondo
         JPanel panelBotones = new JPanel();

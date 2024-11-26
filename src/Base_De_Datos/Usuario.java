@@ -67,7 +67,14 @@ public class Usuario implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
+    public void enviarMensaje(String mensaje, ManejoUsuarios manejoUsuarios) {
+        MensajeChat nuevoMensaje = new MensajeChat(mensaje, this.nombre);
+        manejoUsuarios.DistribuirMensaje(nuevoMensaje);
+    }
+
+    public void recibirMensaje(MensajeChat mensaje) {
+        this.AreaChat.add(mensaje);
+    }
 
 }

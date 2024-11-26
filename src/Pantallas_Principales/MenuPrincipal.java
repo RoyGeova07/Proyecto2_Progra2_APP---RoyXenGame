@@ -4,6 +4,7 @@
  */
 package Pantallas_Principales;
 
+import AreaChat.Discord;
 import Base_De_Datos.ManejoUsuarios;
 import Base_De_Datos.Usuario;
 import Perfil_De_Usuario.Gestion_Perfil;
@@ -118,7 +119,9 @@ public class MenuPrincipal extends JFrame {
 
         Discord.addActionListener(e -> {
 
-            //AGREGAR INSTANCIA DISCORD
+            Discord dis=new Discord(nombreUsuario);
+            dis.setVisible(true);
+            dispose();
         });
 
         Perfil.addActionListener(e -> {
@@ -294,8 +297,11 @@ public class MenuPrincipal extends JFrame {
     }
 
     private void detenerMusica() {
-
-        Musica.stop();
+        
+        //Musica.ResetearReproductor();
+        Musica.stop(); 
+        
+        
     }
 
 }

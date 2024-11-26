@@ -4,6 +4,7 @@
  */
 package Base_De_Datos;
 
+import AreaChat.MensajeChat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -224,9 +225,35 @@ public final class ManejoUsuarios implements ManejoDeDatos {
             System.out.println("Usuario no encontrado: " + nombreUsuario);
             return false;
         }
-
+        boolean esAdmin = usuario instanceof Administrador;
         System.out.println("Usuario encontrado: " + usuario.getNombre() + " - esAdmin: " + usuario.EsAdmin());
-        return usuario.EsAdmin();
+        return esAdmin;
     }
-    
+
+    public void DistribuirMensaje(MensajeChat mensaje) {
+
+        for (Usuario usuario : usuarios) {
+            usuario.recibirMensaje(mensaje);
+        }
+
+        System.out.println("Mensaje distrbuido: " + mensaje);
+
+    }
+
+    public void MostrarHistorialChat(String nombreUsuario) {
+
+        Usuario usuario = ObtenerUsuario(nombreUsuario);
+        if (usuario != null) {
+
+            StringBuilder historial = new StringBuilder();
+            for (MensajeChat mensaje : usuario.getAreaChat()) {
+                historial.append(mensaje.toString()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, historial.toString());
+        } else {
+            JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
+        }
+
+    }
+
 }
