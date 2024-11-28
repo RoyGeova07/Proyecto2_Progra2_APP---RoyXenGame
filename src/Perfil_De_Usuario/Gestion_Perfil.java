@@ -100,7 +100,7 @@ public class Gestion_Perfil extends JFrame {
     JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
     panelBotones.setBackground(new Color(45, 45, 45));
 
-    JButton agregarButton = new JButton("Agregar Música");
+    JButton agregarButton = new JButton("Agregar Musica");
     configurarBoton(agregarButton, new Color(120, 180, 180));
     agregarButton.addActionListener(e -> agregarArchivosMusica());
     panelBotones.add(agregarButton);
@@ -241,7 +241,7 @@ public class Gestion_Perfil extends JFrame {
 
         if (SelectorArchivos.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             for (File archivo : SelectorArchivos.getSelectedFiles()) {
-                if (archivo.getName().matches(".*\\.(mp3|wav|aac)$")) {
+                if (archivo.getName().matches(".*\\.(mp3|wav|aac|m4a)$")) {
                     try {
                         File destino = new File(DirectorioActual, archivo.getName());
                         copiarArchivo(archivo, destino);

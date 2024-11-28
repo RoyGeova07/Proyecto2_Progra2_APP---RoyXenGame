@@ -10,6 +10,7 @@ import Base_De_Datos.Usuario;
 import Perfil_De_Usuario.Gestion_Perfil;
 import Reproductor.Musica;
 import Reproductor.VentanaPrincipal;
+import Steam.MenuSteam;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -70,7 +71,7 @@ public class MenuPrincipal extends JFrame {
         layeredPane.add(panelBotones, Integer.valueOf(1)); // Agregar los botones en una capa superior
 
         // Crear botones con imagenes
-        Juegos = crearBoton("Juegos", "/img_menuprin/juego.png");
+        Juegos = crearBoton("Steam", "/img_menuprin/juego1.png");
         Musicas = crearBoton("Reproductor", "/img_menuprin/musica1.png");
         Discord = crearBoton("Discord", "/img_menuprin/discord1.png");
         Perfil = crearBoton("Mi Perfil", "/img_menuprin/perfil.jpg");
@@ -114,7 +115,9 @@ public class MenuPrincipal extends JFrame {
 
         Juegos.addActionListener(e -> {
 
-            //AGREGAR INSTANCIA JUEGO
+            MenuSteam steam=new MenuSteam(nombreUsuario,archivoUsuario);
+            steam.setVisible(true);
+            dispose();
             
         });
 
@@ -174,7 +177,7 @@ public class MenuPrincipal extends JFrame {
 
                     File DirectorioAdmin = new File(System.getProperty("user.dir")
                             + File.separator + "UsuariosGestion"
-                            + File.separator + UsuarioIngresado);
+                            +    File.separator + UsuarioIngresado);
 
                     PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, this, archivoUsuario);
                     adminPanel.setVisible(true);

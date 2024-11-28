@@ -136,74 +136,6 @@ public final class ManejoUsuarios implements ManejoDeDatos {
         }
 
     }
-    
-    public boolean EliminarUsuario(String nombre){
-        
-        Usuario Usuarioeliminar=ObtenerUsuario(nombre);
-        if(Usuarioeliminar!=null){
-            
-            usuarios.remove(Usuarioeliminar);
-            GuardarUsuarios();
-            
-            //aqui se eliminan las carpetas del usuario
-            File CarpetaUsuario=new File(Carpetaraiz,nombre);
-            EliminarcarpetaRecursiva(CarpetaUsuario);
-            
-            JOptionPane.showMessageDialog(null, "Usuario "+nombre+ " eliminado correctamente","exito",JOptionPane.INFORMATION_MESSAGE);
-            return true;
-            
-        }else{
-            
-            JOptionPane.showMessageDialog(null, "Usuario "+nombre+ " no encontrado","ERROR",JOptionPane.ERROR_MESSAGE);
-            return false;
-            
-        }
-        
-    }
-    
-    private void EliminarcarpetaRecursiva(File Carpeta){
-        
-        if(Carpeta.isDirectory()){
-            
-            for (File archi : Carpeta.listFiles()) {
-
-                EliminarcarpetaRecursiva(archi);
-
-            }
-
-        }
-        Carpeta.delete();
-    }
-
-    public boolean Renombrarusuario(String nombreActual, String nombre) {
-
-        Usuario usua = ObtenerUsuario(nombreActual);
-        if (usua != null) {
-
-            File Carpetaactual = new File(Carpetaraiz, nombreActual);
-            File Carpetanueva = new File(Carpetaraiz, nombre);
-
-            if (Carpetaactual.renameTo(Carpetanueva)) {
-
-                usua.setNombre(nombre);
-                GuardarUsuarios();
-                JOptionPane.showMessageDialog(null, "Usuario renombrado exitosamente", "exito", JOptionPane.INFORMATION_MESSAGE);
-                return true;
-            } else {
-
-                JOptionPane.showMessageDialog(null, "No se pudo renombrar", "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-
-            }
-
-        } else {
-
-            JOptionPane.showMessageDialog(null, "Usuario no encontrado", "error", JOptionPane.ERROR_MESSAGE);
-            return false;
-
-        }
-
-    }
 
     public Usuario ObtenerUsuario(String nombre) {
 
@@ -229,31 +161,4 @@ public final class ManejoUsuarios implements ManejoDeDatos {
         System.out.println("Usuario encontrado: " + usuario.getNombre() + " - esAdmin: " + usuario.EsAdmin());
         return esAdmin;
     }
-
-    public void DistribuirMensaje(MensajeChat mensaje) {
-
-        for (Usuario usuario : usuarios) {
-            usuario.recibirMensaje(mensaje);
-        }
-
-        System.out.println("Mensaje distrbuido: " + mensaje);
-
-    }
-
-    public void MostrarHistorialChat(String nombreUsuario) {
-
-        Usuario usuario = ObtenerUsuario(nombreUsuario);
-        if (usuario != null) {
-
-            StringBuilder historial = new StringBuilder();
-            for (MensajeChat mensaje : usuario.getAreaChat()) {
-                historial.append(mensaje.toString()).append("\n");
-            }
-            JOptionPane.showMessageDialog(null, historial.toString());
-        } else {
-            JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
-        }
-
-    }
-
 }
