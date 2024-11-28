@@ -49,7 +49,7 @@ public class MensajeChat implements Serializable {
     }
     
     public String toString() {
-        return "[" + Timestamp + "] " + remitente + ": " + mensaje;
+        return remitente + ": " + mensaje;
     }
     
     

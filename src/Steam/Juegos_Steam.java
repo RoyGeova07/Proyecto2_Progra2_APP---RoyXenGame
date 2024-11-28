@@ -31,19 +31,16 @@ public class Juegos_Steam extends JFrame {
     public Juegos_Steam(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
 
-        
         this.esAdmin = new ManejoUsuarios().esAdmin(nombreUsuario);
 
-     
         carpetaUsuariosGestion = new File("UsuariosGestion");
         if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
             JOptionPane.showMessageDialog(null,
-                    "La carpeta raiz 'UsuariosGestion' no existe. Por favor, verifica la configuracion.");
+                    "La carpeta raíz 'UsuariosGestion' no existe. Por favor, verifica la configuración.");
             dispose();
             return;
         }
 
-       
         carpetaUsuario = new File(carpetaUsuariosGestion, nombreUsuario);
         if (!carpetaUsuario.exists() || !carpetaUsuario.isDirectory()) {
             JOptionPane.showMessageDialog(null,
@@ -52,52 +49,140 @@ public class Juegos_Steam extends JFrame {
             return;
         }
 
-        
         juegos = cargarJuegos();
 
-        setTitle("Juegos Steam");
+        // Configuración de la ventana principal
+        setTitle("Juegos Steam - " + nombreUsuario);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        
+        // Configuración del panel principal
         JPanel panelJuegos = new JPanel();
         panelJuegos.setLayout(new GridLayout(0, 3, 10, 10));
+        panelJuegos.setBackground(new Color(240, 240, 240)); // Fondo claro
         JScrollPane scrollPane = new JScrollPane(panelJuegos);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Añadir cada juego al panel
         for (Juego juego : juegos) {
             panelJuegos.add(crearPanelJuego(juego));
         }
 
-        
-        JButton btnVolver = new JButton("Volver");
+        // Botón "Volver"
+        JButton btnVolver = crearBoton("Volver", "volver.png");
+        btnVolver.setForeground(Color.BLACK);
         btnVolver.addActionListener(e -> {
             MenuSteam m = new MenuSteam(nombreUsuario, carpetaUsuario);
             m.setVisible(true);
             dispose();
         });
 
-        
+        // Panel inferior con botones
+        JPanel panelInferior = new JPanel();
+        panelInferior.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        panelInferior.setBackground(Color.WHITE);
+        panelInferior.add(btnVolver);
+
         if (esAdmin) {
-            JButton btnEliminar = new JButton("Eliminar Juego");
+            JButton btnEliminar = crearBoton("Eliminar Juego", "Eliminar.png");
+            btnEliminar.setForeground(Color.BLACK);
             btnEliminar.addActionListener(e -> {
                 try {
                     eliminarJuego();
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this,
                             "Error al eliminar el juego: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
-            add(btnEliminar, BorderLayout.NORTH);
+            panelInferior.add(btnEliminar);
         }
 
-        
         add(scrollPane, BorderLayout.CENTER);
-        add(btnVolver, BorderLayout.SOUTH);
+        add(panelInferior, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    private JPanel crearPanelJuego(Juego juego) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+        JLabel lblImagen = new JLabel();
+        lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
+
+        try {
+            byte[] caratulaBytes = juego.getCaratula();
+            if (caratulaBytes != null && caratulaBytes.length > 0) {
+                Image img = Toolkit.getDefaultToolkit().createImage(caratulaBytes);
+                ImageIcon icon = new ImageIcon(img.getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+                lblImagen.setIcon(icon);
+            } else {
+                lblImagen.setText("Sin Imagen");
+                lblImagen.setForeground(Color.GRAY);
+            }
+        } catch (Exception ex) {
+            lblImagen.setText("Error al cargar imagen");
+            lblImagen.setForeground(Color.RED);
+        }
+
+        panel.add(lblImagen, BorderLayout.NORTH);
+
+        JButton btnBuscar = crearBoton("Informacion", "search.png");
+        btnBuscar.setForeground(Color.BLACK);
+        btnBuscar.addActionListener(e -> mostrarInformacion(juego));
+        panel.add(btnBuscar, BorderLayout.CENTER);
+
+        JButton btnDescargar = crearBoton("Descargar", "Descarga.png");
+        btnDescargar.setForeground(Color.BLACK);
+        btnDescargar.addActionListener(e -> descargarJuego(juego));
+        panel.add(btnDescargar, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private JButton crearBoton(String texto, String nombreIcono) {
+        JButton boton = new JButton(texto);
+
+        try {
+            // Ruta de la imagen desde la carpeta img_Steam
+            String rutaIcono = "/img_Steam/" + nombreIcono;
+            ImageIcon icono = new ImageIcon(getClass().getResource(rutaIcono));
+            Image img = icono.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH); // Tamaño del ícono
+            boton.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el ícono: " + nombreIcono);
+        }
+
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.BOTTOM);
+        boton.setFont(new Font("Consolas", Font.PLAIN, 14));
+        boton.setPreferredSize(new Dimension(120, 120));
+
+        // Transparencia en reposo
+        boton.setContentAreaFilled(false);
+        boton.setOpaque(false);
+        boton.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 50))); // Borde transparente claro
+
+        // Cambiar el color al hacer clic
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(true);
+                boton.setBackground(new Color(200, 200, 200, 100));
+            }
+
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(false);
+            }
+        });
+
+        boton.setForeground(Color.WHITE);
+        return boton;
     }
 
     private ArrayList<Juego> cargarJuegos() {
@@ -119,41 +204,6 @@ public class Juegos_Steam extends JFrame {
         return juegos;
     }
 
-    private JPanel crearPanelJuego(Juego juego) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        
-        JLabel lblImagen = new JLabel();
-        lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
-
-        try {
-            byte[] caratulaBytes = juego.getCaratula();
-            if (caratulaBytes != null && caratulaBytes.length > 0) {
-                Image img = Toolkit.getDefaultToolkit().createImage(caratulaBytes);
-                ImageIcon icon = new ImageIcon(img.getScaledInstance(150, 150, Image.SCALE_SMOOTH));
-                lblImagen.setIcon(icon);
-            } else {
-                lblImagen.setText("Sin Imagen");
-            }
-        } catch (Exception ex) {
-            lblImagen.setText("Error al cargar imagen");
-        }
-
-        panel.add(lblImagen, BorderLayout.NORTH);
-
-        JButton btnInfo = new JButton("Ver Informacion");
-        btnInfo.addActionListener(e -> mostrarInformacion(juego));
-        panel.add(btnInfo, BorderLayout.CENTER);
-
-        JButton btnDescargar = new JButton("Descargar");
-        btnDescargar.addActionListener(e -> descargarJuego(juego));
-        panel.add(btnDescargar, BorderLayout.SOUTH);
-
-        return panel;
-    }
-
     private void mostrarInformacion(Juego juego) {
         String info = String.format(
                 "Titulo: %s\nGenero: %s\nDesarrollador: %s\nFecha de Lanzamiento: %s\nRuta de Instalacion: %s",
@@ -161,49 +211,57 @@ public class Juegos_Steam extends JFrame {
         JOptionPane.showMessageDialog(this, info, "Informacion del Juego", JOptionPane.INFORMATION_MESSAGE);
     }
 
-   private void descargarJuego(Juego juego) {
-    if (juego.getRutaInstalacion() == null || juego.getRutaInstalacion().isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "Ruta de instalación no valida para este juego.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        // Obtener ruta base del proyecto
-        String Rutabase = System.getProperty("user.dir");
-        System.out.println("Ruta base: " + Rutabase);
-
-        // Archivo original
-        File archivoOriginal = new File(Rutabase + File.separator + "juegos.dat");
-        System.out.println("Ruta archivo original: " + archivoOriginal.getAbsolutePath());
-        if (!archivoOriginal.exists()) {
+    private void descargarJuego(Juego juego) {
+        if (juego.getRutaInstalacion() == null || juego.getRutaInstalacion().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "El archivo del juego no existe en: " + archivoOriginal.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+                    "Ruta de instalación no valida para este juego.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Carpeta destino
-        File carpetaDestino = new File(Rutabase + File.separator + "UsuariosGestion" + File.separator +
-                nombreUsuario + File.separator + juego.getRutaInstalacion());
-        System.out.println("Ruta carpeta destino: " + carpetaDestino.getAbsolutePath());
-        if (!carpetaDestino.exists()) {
-            carpetaDestino.mkdirs(); // Crear la carpeta si no existe
+        try {
+            // Obtener ruta base del proyecto
+            String Rutabase = System.getProperty("user.dir");
+            System.out.println("Ruta base: " + Rutabase);
+
+            // Archivo original
+            File archivoOriginal = new File(Rutabase + File.separator + "juegos.dat");
+            System.out.println("Ruta archivo original: " + archivoOriginal.getAbsolutePath());
+            if (!archivoOriginal.exists()) {
+                JOptionPane.showMessageDialog(this,
+                        "El archivo del juego no existe en: " + archivoOriginal.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Carpeta destino
+            File carpetaDestino = new File(Rutabase + File.separator + "UsuariosGestion" + File.separator
+                    + nombreUsuario + File.separator + juego.getRutaInstalacion());
+            System.out.println("Ruta carpeta destino: " + carpetaDestino.getAbsolutePath());
+            if (!carpetaDestino.exists()) {
+                carpetaDestino.mkdirs(); // Crear la carpeta si no existe
+            }
+
+            // Archivo destino 
+            File archivoDestino = new File(carpetaDestino, juego.getNombre() + ".dat");
+            System.out.println("Archivo destino: " + archivoDestino.getAbsolutePath());
+
+            if (archivoDestino.exists()) {
+
+                JOptionPane.showMessageDialog(null, "Ya tienes el juego " + juego.getNombre() + " descargado en " + archivoDestino.getAbsolutePath(), "Juego ya descargado", JOptionPane.INFORMATION_MESSAGE);
+                return;
+
+            }
+
+            // Copiar archivo
+            Files.copy(archivoOriginal.toPath(), archivoDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            JOptionPane.showMessageDialog(this,
+                    "Juego descargado exitosamente en: " + archivoDestino.getAbsolutePath(), "Descarga Exitosa", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Error al descargar el juego: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Archivo destino 
-        File archivoDestino = new File(carpetaDestino, juego.getNombre() + ".dat");
-        System.out.println("Archivo destino: " + archivoDestino.getAbsolutePath());
-
-        // Copiar archivo
-        Files.copy(archivoOriginal.toPath(), archivoDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        JOptionPane.showMessageDialog(this,
-                "Juego descargado exitosamente en: " + archivoDestino.getAbsolutePath(), "Descarga Exitosa", JOptionPane.INFORMATION_MESSAGE);
-    } catch (Exception ex) {
-        ex.printStackTrace(); 
-        JOptionPane.showMessageDialog(this,
-                "Error al descargar el juego: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
 
     private void eliminarJuego() throws IOException {
         String nombreJuego = JOptionPane.showInputDialog(this, "Ingrese el nombre del juego a eliminar:");

@@ -58,9 +58,28 @@ public final class ManejoUsuarios implements ManejoDeDatos {
             File CarpetaUsuario=new File(Carpetaraiz,nombre);
             if(!CarpetaUsuario.exists()){
                 CarpetaUsuario.mkdir(); 
+                new File(CarpetaUsuario,"MisDatos").mkdir();
                 new File(CarpetaUsuario,"Juegos").mkdir();
                 new File(CarpetaUsuario,"Musica").mkdir();
+                new File(CarpetaUsuario,"MiChatHistorial").mkdir();
             }
+            
+            //archivo binario para los datos del usuario
+            File archivosDatos=new File(CarpetaUsuario,"MisDatos"+File.separator+nombre+".dat");
+            try(ObjectOutputStream Salida=new ObjectOutputStream(new FileOutputStream(archivosDatos))){
+                
+                Salida.writeObject(new Usuario(nombre,password,esAdmin));
+                
+            }
+            
+            //archibo binario para el historial del chat del usuario
+            File archivoChat=new File(CarpetaUsuario,"MiChatHistorial"+File.separator+nombre+"_historial.dat");
+            try(ObjectOutputStream salidaChat=new ObjectOutputStream(new FileOutputStream(archivoChat))){
+                
+                salidaChat.writeObject(new ArrayList<String>());//se inicia con un archivo vacio
+                
+            }
+            
             JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente", "EXITO", JOptionPane.INFORMATION_MESSAGE);
             return true;
         } catch (IOException e) {
@@ -75,7 +94,7 @@ public final class ManejoUsuarios implements ManejoDeDatos {
         //escirbir los datos de un objeto serializados binarios
         try (ObjectOutputStream datos = new ObjectOutputStream(new FileOutputStream(archivoUsuarios))) {
             datos.writeObject(usuarios);//aqui se guarda la lista
-        } catch (IOException e) {
+        }catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al guardar los usuarios " + e.getMessage());
         }   
 
@@ -161,4 +180,24 @@ public final class ManejoUsuarios implements ManejoDeDatos {
         System.out.println("Usuario encontrado: " + usuario.getNombre() + " - esAdmin: " + usuario.EsAdmin());
         return esAdmin;
     }
+    
+    public Usuario LeerDatosUsuario(String NombreUsuario){
+        
+        File archivosDatos = new File(Carpetaraiz + File.separator + NombreUsuario + File.separator + "MisDatos" + File.separator + NombreUsuario + ".dat");
+
+        if (!archivosDatos.exists()) {
+            System.out.println("el archivo  del usuario no existe: " + archivosDatos.getAbsolutePath());
+            return null;
+
+        }
+
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(archivosDatos))) {
+            return (Usuario) entrada.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error al leer los datos del usuario: " + e.getMessage());
+            return null;
+        }
+
+    }
+
 }

@@ -4,15 +4,10 @@
  */
 package AreaChat;
 
-import Base_De_Datos.ManejoUsuarios;
-import Base_De_Datos.Usuario;
 import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +17,6 @@ import java.util.logging.Logger;
  */
 public class Discord extends JFrame{
     
-    private static final String CARPETA_HISTORIALES = "Historiales_De_ChatsUsuarios"; // Carpeta principal para historiales.
     private static final String ARCHIVO_CHAT = "historial_chat.dat";//variable para el chat en general.
     private  String usuarioEnSesion;
     private JPanel panelMensajes;
@@ -32,15 +26,20 @@ public class Discord extends JFrame{
 
     public Discord(String usuarioEnSesion) throws IOException {
         this.usuarioEnSesion = usuarioEnSesion;
-        
-        //si la carpeta no existe se crea
-        File CarpetasHistorial=new File(CARPETA_HISTORIALES);
-        if(!CarpetasHistorial.exists()){
-            CarpetasHistorial.mkdir();
+
+        File CarpetasHistorial = new File("UsuariosGestion" + File.separator + usuarioEnSesion + File.separator + "MiChatHistorial");
+
+        if (!CarpetasHistorial.exists() || !CarpetasHistorial.isDirectory()) {
+            throw new IOException("La carpeta 'MiChatHistorial' no existe para el usuario: " + usuarioEnSesion);
         }
-        
+
         //aqui se inicializara el archivo del usuario logueado
-        this.archivosHistorial=new File(CarpetasHistorial,usuarioEnSesion+ "_historial.dat");
+        this.archivosHistorial = new File(CarpetasHistorial, usuarioEnSesion + "_historial.dat");
+
+        if (!archivosHistorial.exists()) {
+            archivosHistorial.createNewFile(); // Crear el archivo si no existe
+        }
+
         configurarVentana();
         CargarMensajes();
     }
@@ -142,7 +141,7 @@ public class Discord extends JFrame{
     }
     
     private void EnviarMensaje() throws IOException{
-        
+            
         String texto=campoMensaje.getText().trim();
         if(!texto.isEmpty()){
             
@@ -183,9 +182,9 @@ public class Discord extends JFrame{
     }
     
     private void CargarMensajes() throws IOException{
-        
-        if(!new File(ARCHIVO_CHAT).exists()){
-            new File(ARCHIVO_CHAT).createNewFile();//crea un archivo si no existe
+        File archivoChat=new File(ARCHIVO_CHAT);
+        if(!archivoChat.exists()){
+            archivoChat.createNewFile();
         }
         
         try(RandomAccessFile cargar=new RandomAccessFile(ARCHIVO_CHAT,"r")){
@@ -279,12 +278,9 @@ public class Discord extends JFrame{
         ventanaHistorial.setVisible(true);
     }
     
-    
-       
-
     private void volverAlMenu() {
         dispose(); // Cerrar la ventana actual
-        MenuPrincipal m =new MenuPrincipal(usuarioEnSesion,archivosUSUARIO);
+        MenuPrincipal m =new MenuPrincipal( usuarioEnSesion,archivosUSUARIO);
         m.setVisible(true);
     }
 

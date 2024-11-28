@@ -115,7 +115,7 @@ public class MenuSteam extends JFrame {
             boton.setIcon(new ImageIcon(img));
         } catch (Exception e) {
             System.out.println("No se pudo cargar el icono: " + rutaIcono);
-        }
+        }   
 
         boton.setHorizontalTextPosition(SwingConstants.CENTER);
         boton.setVerticalTextPosition(SwingConstants.BOTTOM);
