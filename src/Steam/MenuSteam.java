@@ -173,7 +173,7 @@ public class MenuSteam extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
 
             // Mostrar la pantalla para agregar juegos
-            Agregar_Juegos agregarJuegosPanel = new Agregar_Juegos();
+            Agregar_Juegos agregarJuegosPanel = new Agregar_Juegos(usuarioActual);
             agregarJuegosPanel.setVisible(true);
             dispose();
         } else {

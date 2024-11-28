@@ -5,7 +5,7 @@
 package Pantallas_Principales;
 
 /**
- *
+ *^
  * @author royum
  */
 public class MAIN {

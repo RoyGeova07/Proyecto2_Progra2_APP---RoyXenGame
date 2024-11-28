@@ -28,24 +28,25 @@ public class Agregar_Juegos extends JFrame {
     private File imagenSeleccionada;
     private String nombreusuario;
     private File archivo;
+    private String UsuarioLogueado;
 
     private static final String RUTA_ARCHIVO_JUEGOS = "juegos.dat";
 
-    public Agregar_Juegos() {
-        setTitle("Agregar Juegos");
+    public Agregar_Juegos(String usuario) {
+        this.UsuarioLogueado=usuario;
+        
+        setTitle("APP RoyXen -> Agregar Juegos del admin "+UsuarioLogueado);
         setSize(500, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Configurar layout
         setLayout(new GridLayout(7, 2, 10, 10));
-
-        // Crear y añadir campos de texto
+      
         add(new JLabel("Titulo del Juego:"));
         txtTitulo = new JTextField();
         add(txtTitulo);
 
-        add(new JLabel("Género:"));
+        add(new JLabel("Genero:"));
         cbGenero = new JComboBox<>(Generos_Juegos.values());
         add(cbGenero);
 
@@ -58,7 +59,7 @@ public class Agregar_Juegos extends JFrame {
         dcFechaLanzamiento.setDateFormatString("dd/MM/yyyy");
         add(dcFechaLanzamiento);
 
-        add(new JLabel("Ruta de Instalación:"));
+        add(new JLabel("Ruta de Instalacion:"));
         txtRutaInstalacion = new JTextField();
         add(txtRutaInstalacion);
 
@@ -84,7 +85,13 @@ public class Agregar_Juegos extends JFrame {
 
        
         JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.addActionListener(e -> dispose());
+        btnCancelar.addActionListener(e -> {
+            
+            MenuSteam m=new MenuSteam(UsuarioLogueado,archivo);
+            m.setVisible(true);
+            dispose();
+            
+        });
         add(btnCancelar);
 
         setVisible(true);
@@ -101,7 +108,7 @@ public class Agregar_Juegos extends JFrame {
 
             @Override
             public String getDescription() {
-                return "Imágenes (PNG, JPG)";
+                return "Imagenes (PNG, JPG)";
             }
 
             private String getExtension(File file) {
@@ -127,7 +134,7 @@ public class Agregar_Juegos extends JFrame {
                     || dcFechaLanzamiento.getDate() == null
                     || txtRutaInstalacion.getText().isEmpty()
                     || imagenSeleccionada == null) {
-                throw new Exception("Por favor, complete todos los campos y seleccione una imagen válida.");
+                throw new Exception("Por favor, complete todos los campos y seleccione una imagen valida.");
             }
 
            
@@ -151,7 +158,7 @@ public class Agregar_Juegos extends JFrame {
             guardarJuegoEnArchivo(nuevoJuego);
 
             JOptionPane.showMessageDialog(this, "Juego agregado exitosamente.");
-            MenuSteam m=new MenuSteam(nombreusuario,archivo);
+            MenuSteam m=new MenuSteam(UsuarioLogueado,archivo);
             m.setVisible(true);
             dispose(); 
         } catch (Exception ex) {
@@ -170,7 +177,7 @@ public class Agregar_Juegos extends JFrame {
                     juegos = (ArrayList<Juego>) ois.readObject();
                 } catch (EOFException eof) {
                     // EOFException ocurre si el archivo esta vacio, ignoramos en este caso.
-                    System.out.println("Archivo vacio. Se inicializará una nueva lista de juegos.");
+                    System.out.println("Archivo vacio. Se inicializara una nueva lista de juegos.");
                 }
             }
 

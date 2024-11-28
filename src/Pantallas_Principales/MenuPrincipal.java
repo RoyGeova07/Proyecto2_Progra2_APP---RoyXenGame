@@ -44,7 +44,7 @@ public class MenuPrincipal extends JFrame {
     private Usuario usu;
 
     public MenuPrincipal(String nombre,File archivoUsuarios) {
-        this.nombreUsuario = nombre;
+        this.nombreUsuario=nombre;
         this.archivoUsuario=archivoUsuarios;
         GUI();
         manejoUsuarios = new ManejoUsuarios();
