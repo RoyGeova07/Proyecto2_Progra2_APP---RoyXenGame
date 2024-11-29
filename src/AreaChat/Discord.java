@@ -8,6 +8,8 @@ import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -182,9 +184,9 @@ public class Discord extends JFrame{
     }
     
     private void CargarMensajes() throws IOException{
-        File archivoChat=new File(ARCHIVO_CHAT);
-        if(!archivoChat.exists()){
-            archivoChat.createNewFile();
+        
+        if(!new File(ARCHIVO_CHAT).exists()){
+            new File(ARCHIVO_CHAT).createNewFile();//crea un archivo si no existe
         }
         
         try(RandomAccessFile cargar=new RandomAccessFile(ARCHIVO_CHAT,"r")){
@@ -192,12 +194,12 @@ public class Discord extends JFrame{
             String linea;
             while((linea=cargar.readLine())!=null){
                 
-                String[] datos=linea.split("::",2);//:: para el separados
-                if(datos.length==2){
-                    
-                    String remitente=datos[0];
-                    String mensaje=datos[1];
-                    AgregarMensajePanel(new MensajeChat(mensaje,remitente));
+                String[] datos=linea.split("::", 3);//:: para el separados
+                if(datos.length==3){
+                    String timestamp=datos[0];
+                    String remitente=datos[1];
+                    String mensaje=datos[2];
+                    AgregarMensajePanel(new MensajeChat(mensaje,remitente,timestamp));
                     
                 }
                 
@@ -212,18 +214,18 @@ public class Discord extends JFrame{
     }
     
     //se guarda el archivo
-    private void GuardarMensajeArchivoGeneral(MensajeChat mensaje) throws IOException{
-        
-        try(RandomAccessFile guardar=new RandomAccessFile(ARCHIVO_CHAT,"rw")){
+    private void GuardarMensajeArchivoGeneral(MensajeChat mensaje) throws IOException {
+
+        try (RandomAccessFile guardar = new RandomAccessFile(ARCHIVO_CHAT, "rw")) {
             guardar.seek(guardar.length());//vamos al final del archivo
-            guardar.writeBytes(mensaje.getRemitente()+ "::"+mensaje.getMensaje()+"\n");
-            
-        }catch(IOException e){
-            
+            guardar.writeBytes(mensaje.getTimestamp() + "::" + mensaje.getRemitente() + "::" + mensaje.getMensaje() + "\n");
+
+        }catch (IOException e) {
+
             JOptionPane.showMessageDialog(null, "ERROR AL GUARDAR EL MENSAJE EN EL CHAT GENERAL");
-            
+
         }
-        
+
     }
     
     private void GuardarMensajeArchivoIndividual(MensajeChat mensaje) throws IOException{
@@ -231,7 +233,7 @@ public class Discord extends JFrame{
         try(RandomAccessFile individual= new RandomAccessFile(archivosHistorial,"rw")){
             
             individual.seek(individual.length());
-            individual.writeBytes(mensaje.getRemitente()+ "::"+mensaje.getMensaje()+"\n");
+            individual.writeBytes(mensaje.getTimestamp()+ "::"+mensaje.getRemitente()+ "::"+mensaje.getMensaje()+"\n");
             
         }catch(IOException e){
             

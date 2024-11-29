@@ -22,9 +22,9 @@ public class MensajeChat implements Serializable {
     public MensajeChat(String mensaje, String remitente) {
         this.mensaje = mensaje;
         this.remitente = remitente;
-        this.Timestamp =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        this.Timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
-    
+
     public MensajeChat(String mensaje, String remitente, String timestamp) {
         this.mensaje = mensaje;
         this.remitente = remitente;
@@ -34,7 +34,6 @@ public class MensajeChat implements Serializable {
     public String getMensaje() {
         return mensaje;
     }
-
 
     public String getNombre() {
         return mensaje;
@@ -47,11 +46,9 @@ public class MensajeChat implements Serializable {
     public String getTimestamp() {
         return Timestamp;
     }
-    
+
     public String toString() {
-        return remitente + ": " + mensaje;
+        return "[" + Timestamp + "] " + remitente + ": " + mensaje;
     }
-    
-    
-    
+
 }
