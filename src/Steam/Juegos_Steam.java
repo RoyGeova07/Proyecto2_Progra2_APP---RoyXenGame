@@ -214,7 +214,7 @@ public class Juegos_Steam extends JFrame {
     private void descargarJuego(Juego juego) {
         if (juego.getRutaInstalacion() == null || juego.getRutaInstalacion().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Ruta de instalación no valida para este juego.", "Error", JOptionPane.ERROR_MESSAGE);
+                    "Ruta de instalacion no valida para este juego.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -246,7 +246,7 @@ public class Juegos_Steam extends JFrame {
 
             if (archivoDestino.exists()) {
 
-                JOptionPane.showMessageDialog(null, "Ya tienes el juego " + juego.getNombre() + " descargado en " + archivoDestino.getAbsolutePath(), "Juego ya descargado", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Ya tienes el juego " + juego.getNombre() + " descargado en " + archivoDestino.getAbsolutePath(), "Juego ya descargado", JOptionPane.ERROR_MESSAGE);
                 return;
 
             }

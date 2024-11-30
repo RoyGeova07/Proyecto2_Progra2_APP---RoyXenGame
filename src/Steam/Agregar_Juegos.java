@@ -36,7 +36,7 @@ public class Agregar_Juegos extends JFrame {
         this.UsuarioLogueado=usuario;
         
         setTitle("APP RoyXen -> Agregar Juegos del admin "+UsuarioLogueado);
-        setSize(500, 500);
+        setSize(700, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -79,12 +79,14 @@ public class Agregar_Juegos extends JFrame {
         add(lblImagen);
 
         
-        JButton btnAgregar = new JButton("Agregar Juego");
+        JButton btnAgregar = crearBoton("Agregar Juego","/img_steam/agregar_juego.png");
+        btnAgregar.setForeground(Color.BLACK);
         btnAgregar.addActionListener(this::agregarJuego);
         add(btnAgregar);
 
        
-        JButton btnCancelar = new JButton("Cancelar");
+        JButton btnCancelar = crearBoton("Cancelar","/img_steam/cancelar.png");
+        btnCancelar.setForeground(Color.BLACK);
         btnCancelar.addActionListener(e -> {
             
             MenuSteam m=new MenuSteam(UsuarioLogueado,archivo);
@@ -164,6 +166,46 @@ public class Agregar_Juegos extends JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+     private JButton crearBoton(String texto, String rutaIcono) {
+        JButton boton = new JButton(texto);
+
+        // Cargar el icono
+        try {
+            ImageIcon icono = new ImageIcon(getClass().getResource(rutaIcono));
+            Image img = icono.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Tamaño del icono
+            boton.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el icono: " + rutaIcono);
+        }
+
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.BOTTOM);
+        boton.setFont(new Font("Consolas", Font.PLAIN, 12));
+        boton.setForeground(Color.BLACK);
+        boton.setPreferredSize(new Dimension(100, 100));
+
+        // Transparencia en reposo
+        boton.setContentAreaFilled(false);
+        boton.setOpaque(false);
+        boton.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 50)));
+
+        // Cambiar el color al hacer clic
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(true);
+                boton.setBackground(new Color(200, 200, 200, 100));
+            }
+
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                boton.setContentAreaFilled(false);
+            }
+        });
+
+        boton.setForeground(Color.WHITE);
+
+        return boton;
     }
 
     private void guardarJuegoEnArchivo(Juego juego) {

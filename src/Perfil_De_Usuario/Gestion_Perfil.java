@@ -100,7 +100,7 @@ public class Gestion_Perfil extends JFrame {
     JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
     panelBotones.setBackground(new Color(45, 45, 45));
 
-    JButton agregarButton = new JButton("Agregar Musica");
+    JButton agregarButton = new JButton("Agregar Musicas o Archivos");
     configurarBoton(agregarButton, new Color(120, 180, 180));
     agregarButton.addActionListener(e -> agregarArchivosMusica());
     panelBotones.add(agregarButton);

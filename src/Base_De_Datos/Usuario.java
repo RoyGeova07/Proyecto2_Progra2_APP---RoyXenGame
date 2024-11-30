@@ -20,12 +20,14 @@ import javax.swing.JOptionPane;
 public class Usuario implements Serializable {
     
     private static final long serialVersionUID = 1L;//ID de serializacion unico
+       private static final String FONDO_POR_DEFECTO = "/img_menuprin/h.gif"; 
     private String nombre;
     private String password;
     private boolean esAdmin;
     private ArrayList<Musica> bibliotecaMusical;
     private ArrayList<Juego> bibliotecaJuego;
     private ArrayList<MensajeChat> AreaChat;
+    private String Fondopersonalizado;
 
     public Usuario(String nombre, String password, boolean esAdmin) throws IOException {
         this.nombre = nombre;
@@ -34,6 +36,7 @@ public class Usuario implements Serializable {
         this.bibliotecaMusical = new ArrayList<>();
         this.bibliotecaJuego = new ArrayList<>();
         this.AreaChat = new ArrayList<>();
+        this.Fondopersonalizado=null;
     }
 
     public String getNombre() {
@@ -46,6 +49,12 @@ public class Usuario implements Serializable {
 
     public boolean EsAdmin() {
         return esAdmin;
+    }
+    
+    public String getFondoPersonalizado(){
+        
+        return Fondopersonalizado!=null ? Fondopersonalizado: FONDO_POR_DEFECTO;
+        
     }
 
     public ArrayList<Musica> getBibliotecaMusical() {
@@ -68,9 +77,12 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
-
     public void recibirMensaje(MensajeChat mensaje) {
         this.AreaChat.add(mensaje);
+    }
+
+    public void setFondoPersonalizado(String rutaFondo) {
+        this.Fondopersonalizado = rutaFondo;
     }
 
 }
