@@ -140,21 +140,7 @@ public final class ManejoUsuarios implements ManejoDeDatos {
 
     }
 
-    @Override
-    public void ListarUsuarios() {
-        if (usuarios.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No hay Usuarios");
-        } else {
-            StringBuilder lista = new StringBuilder("Usuarios Registrados");
-            for (Usuario usuario : usuarios) {
-
-                lista.append("- ").append(usuario.getNombre()).append(usuario.EsAdmin() ? " (Admin)" : "").append("\n");
-
-            }
-            JOptionPane.showMessageDialog(null, lista.toString());
-        }
-
-    }
+   
 
     public Usuario ObtenerUsuario(String nombre) {
 
@@ -198,6 +184,10 @@ public final class ManejoUsuarios implements ManejoDeDatos {
             return null;
         }
 
+    }
+
+    public ArrayList<Usuario> getUsuarios() {
+        return usuarios;
     }
 
 }

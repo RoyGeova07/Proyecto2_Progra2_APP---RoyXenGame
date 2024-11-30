@@ -78,7 +78,13 @@ public class Discord extends JFrame{
             }
         });
         
-        botonVolver.addActionListener(e-> volverAlMenu());
+        botonVolver.addActionListener(e-> {
+            try {
+                volverAlMenu();
+            } catch (IOException ex) {
+                Logger.getLogger(Discord.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         botonHistorial.addActionListener(e-> {
             try {
@@ -280,7 +286,7 @@ public class Discord extends JFrame{
         ventanaHistorial.setVisible(true);
     }
     
-    private void volverAlMenu() {
+    private void volverAlMenu() throws IOException {
         dispose(); // Cerrar la ventana actual
         MenuPrincipal m =new MenuPrincipal( usuarioEnSesion,archivosUSUARIO);
         m.setVisible(true);

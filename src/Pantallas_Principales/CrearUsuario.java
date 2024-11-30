@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -112,7 +115,11 @@ public class CrearUsuario extends JFrame {
                     JOptionPane.showMessageDialog(null, "Usuario creado exitosamente:\n"
                             + "Nombre: " + nombre + "\nAdministrador: " + (esAdmin ? "Sí" : "No"));
                     limpiarCampos();
-                    new MenuPrincipal(nombre, archivoUsuario).setVisible(true);
+                    try {
+                        new MenuPrincipal(nombre, archivoUsuario).setVisible(true);
+                    } catch (IOException ex) {
+                        Logger.getLogger(CrearUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "El usuario ya existe.", "Error", JOptionPane.ERROR_MESSAGE);

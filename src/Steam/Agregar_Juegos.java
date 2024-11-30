@@ -38,6 +38,7 @@ public class Agregar_Juegos extends JFrame {
         setTitle("APP RoyXen -> Agregar Juegos del admin "+UsuarioLogueado);
         setSize(700, 600);
         setLocationRelativeTo(null);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setLayout(new GridLayout(7, 2, 10, 10));

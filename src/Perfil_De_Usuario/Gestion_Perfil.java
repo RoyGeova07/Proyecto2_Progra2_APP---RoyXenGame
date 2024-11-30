@@ -13,6 +13,8 @@ import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,6 +29,7 @@ public class Gestion_Perfil extends JFrame {
     private JPanel panelArchivos;
     private String nombreUsuario;
      private File archivoUsuario;//para el archivo binario
+      MenuPrincipal menu;
 
   public Gestion_Perfil(String nombreUsuario) {
     this.nombreUsuario = nombreUsuario;
@@ -118,7 +121,12 @@ public class Gestion_Perfil extends JFrame {
     JButton Volver = new JButton("Volver");
     configurarBoton(Volver, new Color(120, 20, 60));
     Volver.addActionListener(e -> {
-        MenuPrincipal menu = new MenuPrincipal(nombreUsuario,archivoUsuario);
+       
+        try {
+            menu = new MenuPrincipal(nombreUsuario,archivoUsuario);
+        } catch (IOException ex) {
+            Logger.getLogger(Gestion_Perfil.class.getName()).log(Level.SEVERE, null, ex);
+        }
         menu.setVisible(true);
         dispose();
     });
@@ -224,7 +232,7 @@ public class Gestion_Perfil extends JFrame {
         // Renombrar el archivo o carpeta
         if (archivoActual.renameTo(archivoRenombrado)) {
             JOptionPane.showMessageDialog(this, "Renombrado exitoso.");
-            mostrarContenidoCarpeta(DirectorioActual); // Actualizar la lista de archivos
+            mostrarContenidoCarpeta(DirectorioActual);
         } else {
             JOptionPane.showMessageDialog(this, "No se pudo renombrar el archivo o carpeta.");
         }

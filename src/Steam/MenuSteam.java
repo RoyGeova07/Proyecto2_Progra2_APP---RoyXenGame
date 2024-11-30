@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -38,6 +40,7 @@ public class MenuSteam extends JFrame {
         setTitle("APP RoyXen -> Menu Steam del Usuario: " + usuarioActual);
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Ventana maximizada
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
 
         JLayeredPane layeredPane = new JLayeredPane();
         setContentPane(layeredPane);
@@ -89,7 +92,13 @@ public class MenuSteam extends JFrame {
             System.out.println("Botón Agregar Juegos presionado.");
             agregarJuegos();
         });
-        btnVolver.addActionListener(e -> volver());
+        btnVolver.addActionListener(e -> {
+            try {
+                volver();
+            } catch (IOException ex) {
+                Logger.getLogger(MenuSteam.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 
         setVisible(true);
     }
@@ -185,7 +194,7 @@ public class MenuSteam extends JFrame {
         }
     }
 
-    private void volver() {
+    private void volver() throws IOException {
         MenuPrincipal m = new MenuPrincipal(usuarioActual, archivoUsuario);
         m.setVisible(true);
         dispose(); // Cierra la ventana

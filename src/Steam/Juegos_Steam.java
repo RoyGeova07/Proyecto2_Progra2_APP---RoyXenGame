@@ -56,6 +56,7 @@ public class Juegos_Steam extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
+        setResizable(false);
         setLayout(new BorderLayout());
 
         // Configuración del panel principal

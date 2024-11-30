@@ -13,6 +13,6 @@ public interface ManejoDeDatos {
     public boolean RegistroUsuario(String nombre,String password,boolean esAdmin);
     public void GuardarUsuarios();
     public void CargarUsuarios();
-    public void ListarUsuarios();
+    
     
 }

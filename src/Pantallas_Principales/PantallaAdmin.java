@@ -237,7 +237,7 @@ public class PantallaAdmin extends JFrame {
     
     private void crearFolder_Archivo() {
         if (directorioActual == null || !directorioActual.exists()) {
-            log("Directorio no válido seleccionado.");
+            log("Directorio no valido seleccionado.");
             return;
         }
 

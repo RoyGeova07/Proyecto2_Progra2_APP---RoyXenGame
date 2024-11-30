@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -96,7 +99,11 @@ public class LogIn extends JFrame {
                 if (manejoUsuarios.ValidarCredenciales(usuario, password)) {
                     JOptionPane.showMessageDialog(null, "Bienvenido, usuario " + usuario + "!");
 
-                    new MenuPrincipal(usuario, archivoUsuario).setVisible(true);
+                    try {
+                        new MenuPrincipal(usuario, archivoUsuario).setVisible(true);
+                    } catch (IOException ex) {
+                        Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);

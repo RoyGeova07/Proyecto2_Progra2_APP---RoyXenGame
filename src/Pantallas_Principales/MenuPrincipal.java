@@ -5,6 +5,7 @@
 package Pantallas_Principales;
 
 import AreaChat.Discord;
+import Base_De_Datos.Administrador;
 import Base_De_Datos.ManejoUsuarios;
 import Base_De_Datos.Usuario;
 import Perfil_De_Usuario.Gestion_Perfil;
@@ -38,22 +39,30 @@ public class MenuPrincipal extends JFrame {
     private JButton Perfil;
     private JButton Cerrar_Sesion;
     private JButton Administracion;
+    private String password;
     private ManejoUsuarios manejoUsuarios;
     private static String nombreUsuario;
     private File archivoUsuario;//para el archivo binario
     private Usuario usu;
+    private Administrador adminsito;
 
-    public MenuPrincipal(String nombre,File archivoUsuarios) {
+    public MenuPrincipal(String nombre,File archivoUsuarios) throws IOException {
         this.nombreUsuario=nombre;
         this.archivoUsuario=archivoUsuarios;
         GUI();
+        
         manejoUsuarios = new ManejoUsuarios();
+        manejoUsuarios.CargarUsuarios();
+        adminsito=new Administrador(nombreUsuario,password);
+        adminsito.setListaUsuarios(manejoUsuarios.getUsuarios());
+        
     }
 
     private void GUI() {
         setTitle("APP RoyXen -> Cuenta de " + nombreUsuario);
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Ventana maximizada
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
 
         // Crear un JLayeredPane para manejar fondo y botones
         JLayeredPane layeredPane = new JLayeredPane();
@@ -162,40 +171,53 @@ public class MenuPrincipal extends JFrame {
                 return;
             }
             
-            String UsuarioIngresado = JOptionPane.showInputDialog(null,
+            String[] opciones={"Listar Usuarios","Ingresar carpetas Usuarios"};
+            
+            int opcion=JOptionPane.showOptionDialog(null, "Que desea admin?","Listar Usuarios",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,opciones,opciones[0]);
+            
+            if(opcion==0){
+                
+                adminsito.ListarUsuarios();
+                
+            }else if(opcion==1){
+                
+                 String UsuarioIngresado = JOptionPane.showInputDialog(null,
                     "Ingrese el nombre del usuario para ingresar a sus carpetas",
                     "Verificación Usuario",
-                    JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.PLAIN_MESSAGE);
 
-            if (UsuarioIngresado != null && !UsuarioIngresado.trim().isEmpty()) {
+                if (UsuarioIngresado != null && !UsuarioIngresado.trim().isEmpty()) {
 
-                Usuario usuario = manejoUsuarios.ObtenerUsuario(UsuarioIngresado);
-                if (usuario != null) {
+                    Usuario usuario = manejoUsuarios.ObtenerUsuario(UsuarioIngresado);
+                    if (usuario != null) {
 
-                    JOptionPane.showMessageDialog(null,
-                            "Bienvenido a las carpetas de " + UsuarioIngresado + "!");
+                        JOptionPane.showMessageDialog(null,
+                                "Bienvenido a las carpetas de " + UsuarioIngresado + "!");
 
-                    File DirectorioAdmin = new File(System.getProperty("user.dir")
-                            + File.separator + "UsuariosGestion"
-                            +    File.separator + UsuarioIngresado);
+                        File DirectorioAdmin = new File(System.getProperty("user.dir")
+                                + File.separator + "UsuariosGestion"
+                                + File.separator + UsuarioIngresado);
 
-                    PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, this, archivoUsuario);
-                    adminPanel.setVisible(true);
-                    this.setVisible(false);
+                        PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, this, archivoUsuario);
+                        adminPanel.setVisible(true);
+                        this.setVisible(false);
 
+                    } else {
+                        // Mensaje si el usuario no existe
+                        JOptionPane.showMessageDialog(null,
+                                "El usuario ingresado no existe.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
-                    // Mensaje si el usuario no existe
                     JOptionPane.showMessageDialog(null,
-                            "El usuario ingresado no existe.",
+                            "No ingresaste ningun nombre de usuario.",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
-            } else {
-                JOptionPane.showMessageDialog(null,
-                        "No ingresaste ningun nombre de usuario.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+
             }
+
         });
 
         Cerrar_Sesion.addActionListener(e -> {
