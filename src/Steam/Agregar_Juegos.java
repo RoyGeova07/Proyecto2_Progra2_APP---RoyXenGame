@@ -36,7 +36,7 @@ public class Agregar_Juegos extends JFrame {
         this.UsuarioLogueado=usuario;
         
         setTitle("APP RoyXen -> Agregar Juegos del admin "+UsuarioLogueado);
-        setSize(700, 600);
+        setSize(800, 700);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -62,6 +62,9 @@ public class Agregar_Juegos extends JFrame {
 
         add(new JLabel("Ruta de Instalacion:"));
         txtRutaInstalacion = new JTextField();
+        txtRutaInstalacion.setText("Juegos");
+        txtRutaInstalacion.setEditable(false);
+        txtRutaInstalacion.setBackground(Color.LIGHT_GRAY);
         add(txtRutaInstalacion);
 
         // Selector de imagen

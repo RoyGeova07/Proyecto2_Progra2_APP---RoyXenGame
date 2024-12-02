@@ -4,6 +4,7 @@
  */
 package Base_De_Datos;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -59,9 +60,53 @@ public final class Administrador extends Usuario {
         frame.setVisible(true);
 
     }
+  
+    public void BorrarUsuario(String nombre) {
+
+        ManejoUsuarios manejoUsuarios = new ManejoUsuarios();
+
+        
+        Usuario usuario = manejoUsuarios.ObtenerUsuario(nombre);
+        if (usuario != null) {
+            
+            manejoUsuarios.getUsuarios().remove(usuario);
+
+            // Eliminar las carpetas asociadas al usuario
+            File carpetaUsuario = new File("UsuariosGestion" + File.separator + nombre);
+            if (carpetaUsuario.exists() && carpetaUsuario.isDirectory()) {
+                EliminarCarpetaRecursiva(carpetaUsuario);
+            }
+
+            // Guardar los cambios en el archivo usuarios.dat
+            manejoUsuarios.GuardarUsuarios();
+            System.out.println("Usuario '" + nombre + "' eliminado exitosamente.");
+        } else {
+            System.out.println("Usuario '" + nombre + "' no encontrado.");
+        }
+
+    }
 
     public void setListaUsuarios(ArrayList<Usuario> usuarios) {
         this.listaUsuarios = usuarios;
+    }
+
+    private void EliminarCarpetaRecursiva(File CarpetaUsuario) {
+        
+        for (File archivo : CarpetaUsuario.listFiles()) {
+            
+            if(archivo.isDirectory()){
+                
+                EliminarCarpetaRecursiva(archivo);
+                
+            }else{
+                
+                archivo.delete();
+                
+            }
+            
+        }
+        CarpetaUsuario.delete();
+        
     }
     
 }

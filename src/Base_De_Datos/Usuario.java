@@ -7,11 +7,9 @@ package Base_De_Datos;
 import AreaChat.MensajeChat;
 import Reproductor.Musica;
 import Steam.Juego;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -36,7 +34,6 @@ public class Usuario implements Serializable {
         this.bibliotecaMusical = new ArrayList<>();
         this.bibliotecaJuego = new ArrayList<>();
         this.AreaChat = new ArrayList<>();
-        this.Fondopersonalizado=null;
     }
 
     public String getNombre() {

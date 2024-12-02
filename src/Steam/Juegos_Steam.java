@@ -51,7 +51,6 @@ public class Juegos_Steam extends JFrame {
 
         juegos = cargarJuegos();
 
-        // Configuración de la ventana principal
         setTitle("Juegos Steam - " + nombreUsuario);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
@@ -59,7 +58,6 @@ public class Juegos_Steam extends JFrame {
         setResizable(false);
         setLayout(new BorderLayout());
 
-        // Configuración del panel principal
         JPanel panelJuegos = new JPanel();
         panelJuegos.setLayout(new GridLayout(0, 3, 10, 10));
         panelJuegos.setBackground(new Color(240, 240, 240)); // Fondo claro
@@ -71,7 +69,6 @@ public class Juegos_Steam extends JFrame {
             panelJuegos.add(crearPanelJuego(juego));
         }
 
-        // Botón "Volver"
         JButton btnVolver = crearBoton("Volver", "volver.png");
         btnVolver.setForeground(Color.BLACK);
         btnVolver.addActionListener(e -> {

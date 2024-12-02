@@ -49,7 +49,7 @@ public class ArchivosUsuarios {
         fileChooser.setInitialDirectory(userFolder);
 
         // Filtro para archivos de la musica
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de Musica", "*.mp3", "*.wav","*.m4A"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de Musica", "*.mp3", "*.wav","*.m4a"));
 
         //aqui abre el dialogo de seleccion de archivos
         File archivoSeleccionado = fileChooser.showOpenDialog(stage);

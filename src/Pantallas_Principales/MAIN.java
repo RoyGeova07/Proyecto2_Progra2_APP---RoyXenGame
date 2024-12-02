@@ -8,7 +8,7 @@ package Pantallas_Principales;
  *^
  * @author royum
  */
-public class MAIN {
+public class MAIN { 
 
     /**
      * @param args the command line arguments

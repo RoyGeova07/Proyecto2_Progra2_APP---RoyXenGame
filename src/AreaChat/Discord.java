@@ -8,8 +8,6 @@ import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +22,7 @@ public class Discord extends JFrame{
     private JPanel panelMensajes;
     private JTextField campoMensaje;
     private File archivosHistorial;//variable para el historial, del usuario unico
-    private File archivosUSUARIO;//variable para abrir el menuPrincipal
+    private File archivosUSUARIO;//variable para abrir el menuPrincipal     
 
     public Discord(String usuarioEnSesion) throws IOException {
         this.usuarioEnSesion = usuarioEnSesion;
@@ -68,6 +66,7 @@ public class Discord extends JFrame{
         JButton botonEnviar = crearBoton("Enviar", "/img_Discord/enviar.png");
         JButton botonVolver = crearBoton("Volver", "/img_Discord/volver.png");
         JButton botonHistorial = crearBoton("Historial", "/img_Discord/historial.png");
+        JButton botonChatPrivado=crearBoton("Chats Privados","/img_Discord/wa.png");
         
         //aqui las acciones 
         botonEnviar.addActionListener(e-> {
@@ -94,6 +93,18 @@ public class Discord extends JFrame{
             }
         });
         
+        botonChatPrivado.addActionListener(e->{
+            
+            try {
+                dispose();
+                GUIPrivados priv=new GUIPrivados(usuarioEnSesion);
+                priv.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(Discord.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        });
+        
         
         //aqui se agregan al panel
         Panelinferior.add(campoMensaje,BorderLayout.CENTER);
@@ -101,6 +112,7 @@ public class Discord extends JFrame{
         panelBotones.add(botonVolver);
         panelBotones.add(botonHistorial);
         panelBotones.add(botonEnviar);
+        panelBotones.add(botonChatPrivado);
         Panelinferior.add(panelBotones,BorderLayout.EAST);
         add(Panelinferior,BorderLayout.SOUTH);
         

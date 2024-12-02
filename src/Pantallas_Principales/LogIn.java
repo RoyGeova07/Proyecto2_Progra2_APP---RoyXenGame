@@ -5,6 +5,7 @@
 package Pantallas_Principales;
 
 import Base_De_Datos.ManejoUsuarios;
+import com.sun.tools.javac.Main;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,7 @@ public class LogIn extends JFrame {
     public LogIn() {
         manejoUsuarios = new ManejoUsuarios();
         manejoUsuarios.CargarUsuarios();
-
+        
         setTitle("APP RoyXen -> Login");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,7 +98,12 @@ public class LogIn extends JFrame {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 if (manejoUsuarios.ValidarCredenciales(usuario, password)) {
-                    JOptionPane.showMessageDialog(null, "Bienvenido, usuario " + usuario + "!");
+                    
+                    ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/img_menuprin/confirmacion1.png"));
+                    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+                    ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+                    
+                    JOptionPane.showMessageDialog(null, "Bienvenido, usuario " + usuario + "!", "Exito", JOptionPane.INFORMATION_MESSAGE, iconoEscalado);
 
                     try {
                         new MenuPrincipal(usuario, archivoUsuario).setVisible(true);
@@ -105,7 +111,7 @@ public class LogIn extends JFrame {
                         Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     dispose();
-                } else {
+                }else{
                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -138,7 +144,7 @@ public class LogIn extends JFrame {
         return buttonPanel;
     }
 
-    private JButton crearBoton(String texto) {
+    private JButton crearBoton(String texto){
         JButton boton = new JButton(texto);
         boton.setFont(new Font("Consolas", Font.BOLD, 17)); // Tamaño de fuente más pequeño
         boton.setPreferredSize(new Dimension(130, 40)); // Tamaño reducido
@@ -148,13 +154,13 @@ public class LogIn extends JFrame {
         boton.setBorder(BorderFactory.createLineBorder(new Color(0, 122, 204), 2, true));
 
         // Efecto de hover (cambiar color al pasar el mouse)
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        boton.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseEntered(java.awt.event.MouseEvent evt){
                 boton.setContentAreaFilled(true);
                 boton.setBackground(new Color(0, 0, 0, 50)); // Negro con 50/255 de transparencia.
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(java.awt.event.MouseEvent evt){
                 boton.setBackground(Color.BLUE);
             }
         });
@@ -162,13 +168,13 @@ public class LogIn extends JFrame {
     }
 
     private void cargarFondo(String ruta) {
-        try {
+        try{
             ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
             Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT); // Escala el GIF
             fondo.setIcon(new ImageIcon(img));
             fondo.setHorizontalAlignment(SwingConstants.CENTER); // Centra el GIF
             fondo.setVerticalAlignment(SwingConstants.CENTER);
-        } catch (Exception e) {
+        }catch(Exception e){
             System.out.println("No se pudo cargar el fondo: " + ruta);
         }
     }

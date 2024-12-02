@@ -20,6 +20,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import java.awt.event.*;
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -144,21 +145,45 @@ public class MenuPrincipal extends JFrame {
         });
 
         Perfil.addActionListener(e -> {
-
-            if (nombreUsuario != null && !nombreUsuario.isEmpty()) {
+            
+            String[] opciones = {"Ingresar a perfil","Ingresar a mis carpetas"};
+            
+            ImageIcon iconoEscalado = null;
+            try {
+                URL resource = getClass().getResource("/img_menuprin/interrogacion.png");
+                if (resource != null) {
+                    ImageIcon iconoOriginal = new ImageIcon(resource);
+                    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH); // Tamaño estándar
+                    iconoEscalado = new ImageIcon(imagenEscalada);
+                }
+            } catch (Exception ex) {
+                System.err.println("No se pudo cargar el icono de administración: " + ex.getMessage());
+            }
+            
+            int opcion=JOptionPane.showOptionDialog(null, "Que desea ver "+nombreUsuario + " ?", "Opciones de perfil", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, iconoEscalado, opciones, opciones[0]);
+            
+            if(opcion==0){
+                
+            if(nombreUsuario != null && !nombreUsuario.isEmpty()){
                 // Construimos la ruta en base al directorio actual y al nombre de usuario
                 File carpetaUsuario = new File(System.getProperty("user.dir") + File.separator + "UsuariosGestion"+ File.separator+ nombreUsuario);
-                if (carpetaUsuario.exists()) {
+                if(carpetaUsuario.exists()){
                     // Si la carpeta existe, abrimos el perfil
                     Gestion_Perfil navegador = new Gestion_Perfil(nombreUsuario);
                     navegador.setVisible(true);
                     dispose();
-                } else {
+                }else{
                     JOptionPane.showMessageDialog(null, "El directorio del usuario no existe: " + carpetaUsuario.getAbsolutePath());
                 }
-            } else {
+            }else{
                 JOptionPane.showMessageDialog(null, "Error: El nombre de usuario es nulo o vacio.");
             }
+                
+        }else if(opcion==1){
+            
+            //AGREGAR INSTANCIA DE PERFIL
+            
+        }
 
         });
 
@@ -167,13 +192,26 @@ public class MenuPrincipal extends JFrame {
             String usuarioEnSesion= nombreUsuario;
             
             if(!manejoUsuarios.esAdmin(usuarioEnSesion)){
-                JOptionPane.showMessageDialog(null, "No eres admin Acceso denegado!","Informacion",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "No eres admin Acceso denegado!", "Informacion", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
+            String[] opciones = {"Listar Usuarios", "Ingresar carpetas Usuarios","Borrar Usuarios"};
+
+            ImageIcon iconoEscalado = null;
+            try {
+                URL resource = getClass().getResource("/img_menuprin/interrogacion.png");
+                if (resource != null) {
+                    ImageIcon iconoOriginal = new ImageIcon(resource);
+                    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH); // Tamaño estándar
+                    iconoEscalado = new ImageIcon(imagenEscalada);
+                }
+            } catch (Exception ex) {
+                System.err.println("No se pudo cargar el icono de administración: " + ex.getMessage());
+            }
+
             
-            String[] opciones={"Listar Usuarios","Ingresar carpetas Usuarios"};
-            
-            int opcion=JOptionPane.showOptionDialog(null, "Que desea admin?","Listar Usuarios",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,opciones,opciones[0]);
+            int opcion=JOptionPane.showOptionDialog(null, "Que desea ver admin " +nombreUsuario +" ?","Opciones Administrador",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,iconoEscalado,opciones,opciones[0]);
             
             if(opcion==0){
                 
@@ -181,18 +219,14 @@ public class MenuPrincipal extends JFrame {
                 
             }else if(opcion==1){
                 
-                 String UsuarioIngresado = JOptionPane.showInputDialog(null,
-                    "Ingrese el nombre del usuario para ingresar a sus carpetas",
-                    "Verificación Usuario",
-                        JOptionPane.PLAIN_MESSAGE);
+                String UsuarioIngresado = JOptionPane.showInputDialog(null, "Ingrese el nombre del usuario para ingresar a sus carpetas","Verificacion Usuario",JOptionPane.PLAIN_MESSAGE);
 
-                if (UsuarioIngresado != null && !UsuarioIngresado.trim().isEmpty()) {
+                if(UsuarioIngresado != null && !UsuarioIngresado.trim().isEmpty()){
 
                     Usuario usuario = manejoUsuarios.ObtenerUsuario(UsuarioIngresado);
-                    if (usuario != null) {
+                    if(usuario != null){
 
-                        JOptionPane.showMessageDialog(null,
-                                "Bienvenido a las carpetas de " + UsuarioIngresado + "!");
+                        JOptionPane.showMessageDialog(null,"Bienvenido a las carpetas de " + UsuarioIngresado + "!");
 
                         File DirectorioAdmin = new File(System.getProperty("user.dir")
                                 + File.separator + "UsuariosGestion"
@@ -202,29 +236,54 @@ public class MenuPrincipal extends JFrame {
                         adminPanel.setVisible(true);
                         this.setVisible(false);
 
-                    } else {
-                        // Mensaje si el usuario no existe
-                        JOptionPane.showMessageDialog(null,
-                                "El usuario ingresado no existe.",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
+                    }else{
+                       
+                        JOptionPane.showMessageDialog(null,"El usuario ingresado no existe.","Error",JOptionPane.ERROR_MESSAGE);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            "No ingresaste ningun nombre de usuario.",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                }else{
+                    JOptionPane.showMessageDialog(null, "No ingresaste ningun nombre de usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else if (opcion == 2) {
+
+                String Usuarioborrar = JOptionPane.showInputDialog(null, "Ingrese el nombre del usuario que desea eliminar", "ELIMINAR USUARIO", JOptionPane.PLAIN_MESSAGE);
+
+                if(Usuarioborrar!= null&&!Usuarioborrar.trim().isEmpty()){
+
+                    Usuario usu=manejoUsuarios.ObtenerUsuario(Usuarioborrar);
+                    if(usu!=null){
+
+                        int Confirmacion = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar al usuario" + Usuarioborrar + " ?\n" + "Esto eliminara todos sus datos y carpetas", "CONFIRMAR ELIMINACION", JOptionPane.YES_NO_OPTION);
+
+                        if (Confirmacion==JOptionPane.YES_OPTION) {
+
+                            adminsito.BorrarUsuario(Usuarioborrar);
+                            JOptionPane.showMessageDialog(null, "El usuario "+Usuarioborrar+ "ha sido eliminaod exitsamente","ELIMINACION EXITOSA",JOptionPane.INFORMATION_MESSAGE);
+                            
+
+                        }
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(null,"El usuario ingresado no existe.","Error",JOptionPane.ERROR_MESSAGE);
+
+                    }
+
+                }else{
+                    
+                    JOptionPane.showMessageDialog(null,"No ingresaste ningun nombre de usuario.","Error",  JOptionPane.ERROR_MESSAGE);
+
                 }
 
             }
-
         });
+            
 
         Cerrar_Sesion.addActionListener(e -> {
 
-            MenuInicio inicio = new MenuInicio();
-            inicio.setVisible(true);
-            dispose();
+                MenuInicio inicio = new MenuInicio();
+                inicio.setVisible(true);
+                dispose();
 
         });
         
@@ -233,13 +292,15 @@ public class MenuPrincipal extends JFrame {
     }
 
      private void cargarFondo(String ruta) {
-        try {
+        try{
+            
             ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
             Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT); // Escala el GIF
             fondo.setIcon(new ImageIcon(img));
             fondo.setHorizontalAlignment(SwingConstants.CENTER); // Centra el GIF
             fondo.setVerticalAlignment(SwingConstants.CENTER);
-        } catch (Exception e) {
+            
+        }catch (Exception e) {
             System.out.println("No se pudo cargar el fondo: " + ruta);
         }
     }
@@ -249,17 +310,19 @@ public class MenuPrincipal extends JFrame {
         JButton boton = new JButton(texto);
 
         // Cargar el icono
-        try {
+        try{
+            
             ImageIcon icono = new ImageIcon(getClass().getResource(rutaIcono));
             Image img = icono.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Tamaño del icono
             boton.setIcon(new ImageIcon(img));
-        } catch (Exception e) {
+            
+        }catch (Exception e) {
             System.out.println("No se pudo cargar el icono: " + rutaIcono);
         }
 
         boton.setHorizontalTextPosition(SwingConstants.CENTER);
         boton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        boton.setFont(new Font("Consolas", Font.PLAIN, 12));
+        boton.setFont(new Font("Consolas", Font.PLAIN, 13));
         boton.setPreferredSize(new Dimension(100, 100));
 
         // Transparencia en reposo
@@ -286,18 +349,18 @@ public class MenuPrincipal extends JFrame {
 
     //aqui funcion para acceder al reproductor de musica desde un panel especial
     public void cargarReproductorMusica(MenuPrincipal menuPrincipal) {
-        if (reproductorFrame != null) {
+        if(reproductorFrame != null){
             reproductorFrame.setVisible(true); // Volver a mostrar la ventana
-        } else {
+        }else{
             // Crear el reproductor por primera vez si no existe
             JFXPanel jfxPanel = new JFXPanel();
             jfxPanel.setPreferredSize(new Dimension(850, 800));
 
             Platform.runLater(() -> {
-                try {
+                try{
                     Scene escena = new Scene(new VentanaPrincipal(nombreUsuario, menuPrincipal), 850, 750);
                     jfxPanel.setScene(escena);
-                } catch (Exception e) {
+                }catch(Exception e) {
                     e.printStackTrace();
                 }
             });

@@ -89,7 +89,7 @@ public class MenuSteam extends JFrame {
         // Listeners de botones
         btnVerJuegos.addActionListener(e -> verJuegos());
         btnAgregarJuegos.addActionListener(e -> {
-            System.out.println("Botón Agregar Juegos presionado.");
+            System.out.println("hola salido.");
             agregarJuegos();
         });
         btnVolver.addActionListener(e -> {
@@ -163,7 +163,7 @@ public class MenuSteam extends JFrame {
     private void agregarJuegos() {
 
         
-        if (!manejoUsuarios.esAdmin(usuarioActual)) {
+        if(!manejoUsuarios.esAdmin(usuarioActual)) {
             System.out.println("Usuario no es administrador.");
             JOptionPane.showMessageDialog(this,
                     "No tienes permisos de administrador. Acceso denegado.",
@@ -174,23 +174,21 @@ public class MenuSteam extends JFrame {
 
         Usuario usuario = manejoUsuarios.ObtenerUsuario(usuarioActual);
 
-        if (usuario != null) {
-            System.out.println("Usuario encontrado. Abriendo pantalla de agregar juegos.");
-            JOptionPane.showMessageDialog(this,
-                    "Bienvenido, administrador: " + usuarioActual,
-                    "Acceso Permitido",
-                    JOptionPane.INFORMATION_MESSAGE);
+        if(usuario != null){
+
+            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/img_Steam/confirmacion.png"));
+            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+            ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+
+            System.out.println("hola");
+            JOptionPane.showMessageDialog(this, "Bienvenido, administrador: " + usuarioActual, "Acceso Permitido", JOptionPane.INFORMATION_MESSAGE,iconoEscalado);
 
             // Mostrar la pantalla para agregar juegos
             Agregar_Juegos agregarJuegosPanel = new Agregar_Juegos(usuarioActual);
             agregarJuegosPanel.setVisible(true);
             dispose();
-        } else {
-            System.out.println("Usuario no encontrado en el sistema.");
-            JOptionPane.showMessageDialog(this,
-                    "El usuario no existe en el sistema. Verifique la configuración.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(this,"El usuario no existe en el sistema. Verifique la configuracion.","Error",JOptionPane.ERROR_MESSAGE);
         }
     }
 

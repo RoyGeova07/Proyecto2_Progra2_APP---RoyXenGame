@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Base_De_Datos/ManejoUsuarios.java</file>
-            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Base_De_Datos/Usuario.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/AreaChat/DiscordPrivado.java</file>
             <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/MAIN.java</file>
-            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Steam/Agregar_Juegos.java</file>
-            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Pantallas_Principales/MenuPrincipal.java</file>
-            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/Steam/MenuSteam.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/AreaChat/Discord.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/AreaChat/ChatsPrivados.java</file>
+            <file>file:/C:/Users/royum/OneDrive/Documentos/NetBeansProjects/Proyecto2_Progra2_Steam/src/AreaChat/GUIPrivados.java</file>
         </group>
     </open-files>
 </project-private>

@@ -1,4 +1,4 @@
-/*
+  /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -6,12 +6,9 @@ package Perfil_De_Usuario;
 
 import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.io.*;
-import java.nio.file.*;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +31,7 @@ public class Gestion_Perfil extends JFrame {
   public Gestion_Perfil(String nombreUsuario) {
     this.nombreUsuario = nombreUsuario;
 
-    // Carpeta raíz de gestión
+    // Carpeta raiz de gestion
     File carpetaUsuariosGestion = new File("UsuariosGestion");
     if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
         JOptionPane.showMessageDialog(null, 
@@ -103,7 +100,7 @@ public class Gestion_Perfil extends JFrame {
     JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
     panelBotones.setBackground(new Color(45, 45, 45));
 
-    JButton agregarButton = new JButton("Agregar Musicas o Archivos");
+    JButton agregarButton = new JButton("Agregar Musicas");
     configurarBoton(agregarButton, new Color(120, 180, 180));
     agregarButton.addActionListener(e -> agregarArchivosMusica());
     panelBotones.add(agregarButton);
@@ -148,7 +145,7 @@ public class Gestion_Perfil extends JFrame {
         }
         File[] archivos = directorio.listFiles();
         if (archivos != null) {
-            Arrays.sort(archivos);
+            Arrays.sort(archivos);//el sort me ayuda a ordenar los objetos en el arreglo por su nombre
             for (File archivo : archivos) {
                 DefaultMutableTreeNode Nodo_Secundario = new DefaultMutableTreeNode(archivo.getName());
                 node.add(Nodo_Secundario);
@@ -279,7 +276,9 @@ public class Gestion_Perfil extends JFrame {
         if (nombreArchivo != null && !nombreArchivo.trim().isEmpty()) {
             File archivo = new File(DirectorioActual, nombreArchivo);
             if (archivo.exists() && archivo.delete()) {
-                JOptionPane.showMessageDialog(this, "Archivo eliminado.");
+                JOptionPane.showMessageDialog(this, "Archivo " +nombreArchivo+  " eliminado.");
+                dispose();
+                new Gestion_Perfil(nombreUsuario).setVisible(true);
                 mostrarContenidoCarpeta(DirectorioActual);
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo eliminar el archivo.");

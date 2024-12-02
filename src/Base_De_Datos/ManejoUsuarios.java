@@ -4,7 +4,6 @@
  */
 package Base_De_Datos;
 
-import AreaChat.MensajeChat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

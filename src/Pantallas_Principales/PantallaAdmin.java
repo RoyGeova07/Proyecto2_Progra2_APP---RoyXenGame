@@ -12,8 +12,6 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.tree.TreeNode;
 
@@ -95,21 +93,23 @@ public class PantallaAdmin extends JFrame {
         return button;
     }
 
-    private void Cargar_Directorio(File directory, DefaultMutableTreeNode parentNode) {
+    private void Cargar_Directorio(File directory, DefaultMutableTreeNode NodoPadre) {
         if (directory == null || !directory.exists()) {
             return;
         }
 
         File[] files = directory.listFiles();
         if (files != null) {
+            
             Arrays.sort(files);
             for (File file : files) {
                 DefaultMutableTreeNode NodoSecudario = new DefaultMutableTreeNode(file.getName());
-                parentNode.add(NodoSecudario);
+                NodoPadre.add(NodoSecudario);
                 if (file.isDirectory()) {
                     Cargar_Directorio(file, NodoSecudario);
                 }
             }
+            
         }
     }
 
@@ -155,7 +155,7 @@ public class PantallaAdmin extends JFrame {
 
     private void Agregarmusica() {
         if (directorioActual == null || !directorioActual.exists()) {
-            log("Directorio no válido seleccionado.");
+            log("Directorio no valido seleccionado.");
             return;
         }
 
@@ -276,6 +276,13 @@ public class PantallaAdmin extends JFrame {
 
     private void renombrar_Archivo(File archivoOriginal, String nuevoNombre) {
         
+        if(archivoOriginal==null){
+            
+            log("Elige un directorio valido");
+            return;
+            
+        }
+        
         if(!archivoOriginal.exists()) {
             log("el archivo orginial no existe " + archivoOriginal.getAbsolutePath());
             return;
@@ -294,9 +301,9 @@ public class PantallaAdmin extends JFrame {
      
         boolean exito = archivoOriginal.renameTo(archivoRenombrado);
 
-        if (exito) {
+        if(exito){
             log("Archivo renombrado exitosamente: " + archivoRenombrado.getAbsolutePath());
-        } else {
+        }else{
             log("No se pudo renombrar el archivo: " + archivoOriginal.getAbsolutePath());
         }
     }
