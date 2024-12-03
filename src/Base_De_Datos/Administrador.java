@@ -67,7 +67,7 @@ public final class Administrador extends Usuario {
 
         
         Usuario usuario = manejoUsuarios.ObtenerUsuario(nombre);
-        if (usuario != null) {
+        if(usuario != null) {
             
             manejoUsuarios.getUsuarios().remove(usuario);
 
@@ -80,7 +80,7 @@ public final class Administrador extends Usuario {
             // Guardar los cambios en el archivo usuarios.dat
             manejoUsuarios.GuardarUsuarios();
             System.out.println("Usuario '" + nombre + "' eliminado exitosamente.");
-        } else {
+        }else{
             System.out.println("Usuario '" + nombre + "' no encontrado.");
         }
 

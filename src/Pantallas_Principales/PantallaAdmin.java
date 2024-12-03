@@ -161,7 +161,7 @@ public class PantallaAdmin extends JFrame {
 
         JFileChooser ArchivoElegir = new JFileChooser();
         ArchivoElegir.setMultiSelectionEnabled(true);
-        ArchivoElegir.setFileFilter(new FileNameExtensionFilter("Archivos de musica", "mp3", "wav", "aac","m4a"));
+        ArchivoElegir.setFileFilter(new FileNameExtensionFilter("Archivos de musica", "mp3", "wav", "aac"));
 
         int result = ArchivoElegir.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {

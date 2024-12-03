@@ -36,7 +36,7 @@ public class Juegos_Steam extends JFrame {
         carpetaUsuariosGestion = new File("UsuariosGestion");
         if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
             JOptionPane.showMessageDialog(null,
-                    "La carpeta raíz 'UsuariosGestion' no existe. Por favor, verifica la configuración.");
+                    "La carpeta raiz 'UsuariosGestion' no existe. Por favor, verifica la configuración.");
             dispose();
             return;
         }
@@ -269,12 +269,12 @@ public class Juegos_Steam extends JFrame {
         }
 
         boolean eliminado = juegos.removeIf(juego -> juego.getNombre().equalsIgnoreCase(nombreJuego));
-        if (eliminado) {
+        if(eliminado){
             guardarJuegos();
             JOptionPane.showMessageDialog(this, "El juego ha sido eliminado exitosamente.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
             dispose();
             new Juegos_Steam(nombreUsuario).setVisible(true); // Recargar la ventana
-        } else {
+        }else{
             JOptionPane.showMessageDialog(this, "No se encontro ningun juego con el nombre " + nombreJuego + ".", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

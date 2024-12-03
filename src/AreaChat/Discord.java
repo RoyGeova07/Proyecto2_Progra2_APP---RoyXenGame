@@ -4,6 +4,7 @@
  */
 package AreaChat;
 
+import Base_De_Datos.Usuario;
 import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,7 @@ public class Discord extends JFrame{
     private JTextField campoMensaje;
     private File archivosHistorial;//variable para el historial, del usuario unico
     private File archivosUSUARIO;//variable para abrir el menuPrincipal     
+    private Usuario user;
 
     public Discord(String usuarioEnSesion) throws IOException {
         this.usuarioEnSesion = usuarioEnSesion;
@@ -46,7 +48,7 @@ public class Discord extends JFrame{
 
     private void configurarVentana() {
         setTitle("APP RoyXen -> Discord del Usuario "+usuarioEnSesion);
-        setSize(800,750);
+        setSize(900,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);

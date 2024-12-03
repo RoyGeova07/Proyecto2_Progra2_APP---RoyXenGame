@@ -9,7 +9,6 @@ import Base_De_Datos.Usuario;
 import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +25,7 @@ public class MenuSteam extends JFrame {
     private JPanel panelBotones;
     private File archivoUsuario; // Para el archivo binario
     private ManejoUsuarios manejoUsuarios;
+    private Usuario user;
 
     public MenuSteam(String usuarioActual, File archivoUsuario) {
         this.usuarioActual = usuarioActual;

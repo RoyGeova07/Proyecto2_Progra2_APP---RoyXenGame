@@ -115,7 +115,7 @@ public final class ManejoUsuarios implements ManejoDeDatos {
 
         File archivo = new File(archivoUsuarios);
 
-        if (archivo.exists()) {
+        if(archivo.exists()){
             try (ObjectInputStream leer = new ObjectInputStream(new FileInputStream(archivoUsuarios))) {
                 usuarios = (ArrayList<Usuario>) leer.readObject();
                 
@@ -154,10 +154,10 @@ public final class ManejoUsuarios implements ManejoDeDatos {
 
     }
 
-    public boolean esAdmin(String nombreUsuario) {
+    public boolean esAdmin(String nombreUsuario){
         Usuario usuario = ObtenerUsuario(nombreUsuario);
 
-        if (usuario == null) {
+        if(usuario == null){
             System.out.println("Usuario no encontrado: " + nombreUsuario);
             return false;
         }
@@ -170,15 +170,15 @@ public final class ManejoUsuarios implements ManejoDeDatos {
         
         File archivosDatos = new File(Carpetaraiz + File.separator + NombreUsuario + File.separator + "MisDatos" + File.separator + NombreUsuario + ".dat");
 
-        if (!archivosDatos.exists()) {
+        if(!archivosDatos.exists()){
             System.out.println("el archivo  del usuario no existe: " + archivosDatos.getAbsolutePath());
             return null;
 
         }
 
-        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(archivosDatos))) {
+        try(ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(archivosDatos))){
             return (Usuario) entrada.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        }catch(IOException | ClassNotFoundException e){
             System.out.println("Error al leer los datos del usuario: " + e.getMessage());
             return null;
         }

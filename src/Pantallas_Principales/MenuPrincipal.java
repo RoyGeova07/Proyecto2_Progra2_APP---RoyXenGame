@@ -146,39 +146,39 @@ public class MenuPrincipal extends JFrame {
 
         Perfil.addActionListener(e -> {
             
-            String[] opciones = {"Ingresar a perfil","Ingresar a mis carpetas"};
+            String[] opciones = {"Ingresar a mis carpetas","Ingresar a mi perfil"};
             
             ImageIcon iconoEscalado = null;
             try {
                 URL resource = getClass().getResource("/img_menuprin/interrogacion.png");
                 if (resource != null) {
                     ImageIcon iconoOriginal = new ImageIcon(resource);
-                    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH); // Tamaño estándar
+                    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH); // Tamaño estandar
                     iconoEscalado = new ImageIcon(imagenEscalada);
                 }
             } catch (Exception ex) {
-                System.err.println("No se pudo cargar el icono de administración: " + ex.getMessage());
+                System.out.println("No se pudo cargar el icono de administracion: " + ex.getMessage());
             }
             
             int opcion=JOptionPane.showOptionDialog(null, "Que desea ver "+nombreUsuario + " ?", "Opciones de perfil", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, iconoEscalado, opciones, opciones[0]);
-            
-            if(opcion==0){
-                
-            if(nombreUsuario != null && !nombreUsuario.isEmpty()){
-                // Construimos la ruta en base al directorio actual y al nombre de usuario
-                File carpetaUsuario = new File(System.getProperty("user.dir") + File.separator + "UsuariosGestion"+ File.separator+ nombreUsuario);
-                if(carpetaUsuario.exists()){
-                    // Si la carpeta existe, abrimos el perfil
-                    Gestion_Perfil navegador = new Gestion_Perfil(nombreUsuario);
-                    navegador.setVisible(true);
-                    dispose();
+              
+            if (opcion == 0) {
+
+                if (nombreUsuario != null && !nombreUsuario.isEmpty()) {
+                    // Construimos la ruta en base al directorio actual y al nombre de usuario
+                    File carpetaUsuario = new File(System.getProperty("user.dir") + File.separator + "UsuariosGestion" + File.separator + nombreUsuario);
+                    if (carpetaUsuario.exists()) {
+                        // Si la carpeta existe, abrimos el perfil
+                        Gestion_Perfil navegador = new Gestion_Perfil(nombreUsuario);
+                        navegador.setVisible(true);
+                        dispose();
                 }else{
                     JOptionPane.showMessageDialog(null, "El directorio del usuario no existe: " + carpetaUsuario.getAbsolutePath());
                 }
             }else{
                 JOptionPane.showMessageDialog(null, "Error: El nombre de usuario es nulo o vacio.");
             }
-                
+            
         }else if(opcion==1){
             
             //AGREGAR INSTANCIA DE PERFIL
@@ -247,6 +247,13 @@ public class MenuPrincipal extends JFrame {
             } else if (opcion == 2) {
 
                 String Usuarioborrar = JOptionPane.showInputDialog(null, "Ingrese el nombre del usuario que desea eliminar", "ELIMINAR USUARIO", JOptionPane.PLAIN_MESSAGE);
+                
+                if(Usuarioborrar.equalsIgnoreCase(nombreUsuario)){
+                    
+                    JOptionPane.showMessageDialog(null, "No podes eliminar tu cuenta porque estas en sesion activa","INFORMACION",JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                    
+                }
 
                 if(Usuarioborrar!= null&&!Usuarioborrar.trim().isEmpty()){
 
@@ -259,7 +266,12 @@ public class MenuPrincipal extends JFrame {
 
                             adminsito.BorrarUsuario(Usuarioborrar);
                             JOptionPane.showMessageDialog(null, "El usuario "+Usuarioborrar+ "ha sido eliminaod exitsamente","ELIMINACION EXITOSA",JOptionPane.INFORMATION_MESSAGE);
-                            
+                            dispose();
+                            try {
+                                new MenuPrincipal(nombreUsuario,archivoUsuario).setVisible(true);
+                            } catch (IOException ex) {
+                                Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                            }
 
                         }
 

@@ -108,8 +108,8 @@ public class Agregar_Juegos extends JFrame {
         fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
             @Override
             public boolean accept(File f) {
-                String ext = getExtension(f);
-                return f.isDirectory() || ext.equals("png") || ext.equals("jpg");
+                String extension = getExtension(f);
+                return f.isDirectory() || extension.equals("png") || extension.equals("jpg");
             }
 
             @Override

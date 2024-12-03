@@ -4,6 +4,7 @@
  */
 package Perfil_De_Usuario;
 
+import Base_De_Datos.Usuario;
 import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -25,8 +26,9 @@ public class Gestion_Perfil extends JFrame {
     private File DirectorioActual;
     private JPanel panelArchivos;
     private String nombreUsuario;
-     private File archivoUsuario;//para el archivo binario
-      MenuPrincipal menu;
+    private File archivoUsuario;//para el archivo binario
+    MenuPrincipal menu;
+    private Usuario user;
 
   public Gestion_Perfil(String nombreUsuario) {
     this.nombreUsuario = nombreUsuario;
@@ -35,7 +37,7 @@ public class Gestion_Perfil extends JFrame {
     File carpetaUsuariosGestion = new File("UsuariosGestion");
     if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
         JOptionPane.showMessageDialog(null, 
-            "La carpeta raíz 'UsuariosGestion' no existe. Por favor, verifica la configuración.");
+            "La carpeta raiz 'UsuariosGestion' no existe. Por favor, verifica la configuracion.");
         dispose();
         return;
     }
@@ -49,14 +51,14 @@ public class Gestion_Perfil extends JFrame {
         return;
     }
 
-    // Configuración del JFrame
+    // Configuracion del JFrame
     setTitle("APP RoyXen -> Archivos de " + nombreUsuario);
     setSize(1000, 700);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
 
-    // Crear el árbol de directorios
+    // Crear el arbol de directorios
     JPanel panelIzquierdo = new JPanel(new BorderLayout());
     panelIzquierdo.setPreferredSize(new Dimension(250, 0));
     panelIzquierdo.setBackground(Color.BLACK);
@@ -246,7 +248,7 @@ public class Gestion_Perfil extends JFrame {
 
         if (SelectorArchivos.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             for (File archivo : SelectorArchivos.getSelectedFiles()) {
-                if (archivo.getName().matches(".*\\.(mp3|wav|aac|m4a)$")) {
+                if (archivo.getName().matches(".*\\.(mp3|wav|aac)$")) {
                     try {
                         File destino = new File(DirectorioActual, archivo.getName());
                         copiarArchivo(archivo, destino);
@@ -272,6 +274,7 @@ public class Gestion_Perfil extends JFrame {
     }
 
     private void eliminarArchivo() {
+        
         String nombreArchivo = JOptionPane.showInputDialog(this, "Ingrese el nombre del archivo a eliminar:");
         if (nombreArchivo != null && !nombreArchivo.trim().isEmpty()) {
             File archivo = new File(DirectorioActual, nombreArchivo);
