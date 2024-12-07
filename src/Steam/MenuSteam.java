@@ -61,7 +61,7 @@ public class MenuSteam extends JFrame {
         JButton btnVolver = crearBoton("Volver", "/img_steam/volver.png");
 
         if (!manejoUsuarios.esAdmin(usuarioActual)) {
-            btnAgregarJuegos.setEnabled(false);
+            btnAgregarJuegos.setVisible(false);
         }
 
         GridBagConstraints gbc = new GridBagConstraints();

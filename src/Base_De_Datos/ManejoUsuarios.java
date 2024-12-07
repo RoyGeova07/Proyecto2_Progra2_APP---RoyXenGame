@@ -22,7 +22,7 @@ public final class ManejoUsuarios implements ManejoDeDatos {
 
     private ArrayList<Usuario> usuarios; //arhivo binario
     private final String Carpetaraiz="UsuariosGestion";
-    private final String archivoUsuarios = "usuarios.dat";//este son archivos temporales que se generan para registrar informacion informacion
+    private final String archivoUsuarios = "usuarios.dat";//este son archivos temporales que se generan para registrar informacion
 
     public ManejoUsuarios() {
         this.usuarios = new ArrayList<>();

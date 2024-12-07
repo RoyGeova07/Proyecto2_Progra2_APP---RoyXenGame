@@ -62,15 +62,5 @@ public class Juego implements Serializable {
         return caratula;
     }
 
-    public String toString() {
-        return "Juego{"
-                + "nombre='" + nombre + '\''
-                + ", generoJuegos=" + Genero_Juegos
-                + ", desarrollador='" + Desarrollador + '\''
-                + ", fechaLanzamiento='" + FechaLanzamiento + '\''
-                + ", rutaInstalacion='" + rutaInstalacion + '\''
-                + ", descargas=" + descargas
-                + '}';
-    }
 
 }

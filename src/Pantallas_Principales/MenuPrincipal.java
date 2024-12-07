@@ -9,8 +9,11 @@ import Base_De_Datos.Administrador;
 import Base_De_Datos.ManejoUsuarios;
 import Base_De_Datos.Usuario;
 import Perfil_De_Usuario.Gestion_Perfil;
+import Perfil_De_Usuario.Pantalla_Perfil;
+import Reproductor.MenuMusica;
 import Reproductor.Musica;
 import Reproductor.VentanaPrincipal;
+import Steam.Juegos_Steam;
 import Steam.MenuSteam;
 import javax.swing.*;
 import java.awt.*;
@@ -46,6 +49,7 @@ public class MenuPrincipal extends JFrame {
     private File archivoUsuario;//para el archivo binario
     private Usuario usu;
     private Administrador adminsito;
+    private Juegos_Steam juegos;
 
     public MenuPrincipal(String nombre,File archivoUsuarios) throws IOException {
         this.nombreUsuario=nombre;
@@ -131,7 +135,41 @@ public class MenuPrincipal extends JFrame {
             
         });
 
-        Musicas.addActionListener(e -> cargarReproductorMusica(this));
+        Musicas.addActionListener(e -> {
+            
+            String[] Opciones={"Entrar a mi reproductor","Entrar al Menu Musica"};
+            
+              ImageIcon iconoEscalado = null;
+            try {
+                URL resource = getClass().getResource("/img_menuprin/interrogacion.png");
+                if (resource != null) {
+                    ImageIcon iconoOriginal = new ImageIcon(resource);
+                    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH); // Tamaño estandar
+                    iconoEscalado = new ImageIcon(imagenEscalada);
+                }
+            } catch (Exception ex) {
+                System.out.println("No se pudo cargar el icono de administracion: " + ex.getMessage());
+            }
+            
+            int opcion=JOptionPane.showOptionDialog(null, "Que desea ver "+nombreUsuario+ " ?", "Opciones Musica", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, iconoEscalado, Opciones, Opciones[0]);
+            
+            if(opcion==0){
+                
+                cargarReproductorMusica(this);
+                
+            }else if(opcion==1){
+                
+                dispose();
+                MenuMusica music=new MenuMusica(nombreUsuario,archivoUsuario);
+                music.setVisible(true);
+                
+                
+            }
+            
+           
+            
+            
+        });
 
         Discord.addActionListener(e -> {
 
@@ -181,7 +219,13 @@ public class MenuPrincipal extends JFrame {
             
         }else if(opcion==1){
             
-            //AGREGAR INSTANCIA DE PERFIL
+                try {
+                    Pantalla_Perfil m =new Pantalla_Perfil(nombreUsuario);
+                    dispose();
+                    m.setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             
         }
 
@@ -195,9 +239,13 @@ public class MenuPrincipal extends JFrame {
                 JOptionPane.showMessageDialog(null, "No eres admin Acceso denegado!", "Informacion", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
             String[] opciones = {"Listar Usuarios", "Ingresar carpetas Usuarios","Borrar Usuarios"};
-
+//AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
+            //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
+            
+            //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
+            //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
             ImageIcon iconoEscalado = null;
             try {
                 URL resource = getClass().getResource("/img_menuprin/interrogacion.png");
@@ -247,6 +295,12 @@ public class MenuPrincipal extends JFrame {
             } else if (opcion == 2) {
 
                 String Usuarioborrar = JOptionPane.showInputDialog(null, "Ingrese el nombre del usuario que desea eliminar", "ELIMINAR USUARIO", JOptionPane.PLAIN_MESSAGE);
+                
+                if(Usuarioborrar==null){
+                    JOptionPane.showMessageDialog(null, "No existe el usuario");
+                    return;
+                    
+                }
                 
                 if(Usuarioborrar.equalsIgnoreCase(nombreUsuario)){
                     

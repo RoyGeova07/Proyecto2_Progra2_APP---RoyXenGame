@@ -17,8 +17,7 @@ import java.util.ArrayList;
  */
 public class Usuario implements Serializable {
     
-    private static final long serialVersionUID = 1L;//ID de serializacion unico
-    private static final String FONDO_POR_DEFECTO = "/img_menuprin/h.gif"; 
+    private static final long serialVersionUID = 1L;//ID de serializacion unico 
     private String nombre;
     private String password;
     private boolean esAdmin;

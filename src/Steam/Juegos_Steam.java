@@ -5,33 +5,34 @@
 package Steam;
 
 import Base_De_Datos.ManejoUsuarios;
-import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author royum
  */
-public class Juegos_Steam extends JFrame {
+public final class Juegos_Steam extends JFrame {
 
     private String nombreUsuario;
     private File carpetaUsuariosGestion;
     private File carpetaUsuario;
-    private boolean esAdmin;
+    private boolean Esadmin;
     private ArrayList<Juego> juegos;
+    Juego juego;
+    JButton btnDescargar;
+    File archivoDestino;
+    
 
     public Juegos_Steam(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
 
-        this.esAdmin = new ManejoUsuarios().esAdmin(nombreUsuario);
+        this.Esadmin = new ManejoUsuarios().esAdmin(nombreUsuario);
 
         carpetaUsuariosGestion = new File("UsuariosGestion");
         if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
@@ -51,7 +52,7 @@ public class Juegos_Steam extends JFrame {
 
         juegos = cargarJuegos();
 
-        setTitle("Juegos Steam - " + nombreUsuario);
+        setTitle("APP RoyXen -> Biblioteca Steam de la cuenta - " + nombreUsuario);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -76,22 +77,21 @@ public class Juegos_Steam extends JFrame {
             m.setVisible(true);
             dispose();
         });
-
+        
         // Panel inferior con botones
         JPanel panelInferior = new JPanel();
         panelInferior.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         panelInferior.setBackground(Color.WHITE);
         panelInferior.add(btnVolver);
 
-        if (esAdmin) {
+        if (Esadmin) {
             JButton btnEliminar = crearBoton("Eliminar Juego", "Eliminar.png");
             btnEliminar.setForeground(Color.BLACK);
             btnEliminar.addActionListener(e -> {
                 try {
                     eliminarJuego();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this,
-                            "Error al eliminar el juego: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this,"Error al eliminar el juego: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             panelInferior.add(btnEliminar);
@@ -136,8 +136,24 @@ public class Juegos_Steam extends JFrame {
         btnBuscar.addActionListener(e -> mostrarInformacion(juego));
         panel.add(btnBuscar, BorderLayout.CENTER);
 
-        JButton btnDescargar = crearBoton("Descargar", "Descarga.png");
+        btnDescargar = crearBoton("Descargar", "Descarga.png");
         btnDescargar.setForeground(Color.BLACK);
+        
+        File CarpetaUsuariosJuegos=new File(carpetaUsuario, "Juegos");
+        File ArchivoDescargado=new File(CarpetaUsuariosJuegos,juego.getNombre() + ".dat");
+        
+        if(ArchivoDescargado.exists()){
+            
+            btnDescargar.setText("Ya descargado");
+            btnDescargar.setEnabled(false);
+            
+        }else{
+            
+            btnDescargar.addActionListener(e-> descargarJuego(juego));
+            
+        }
+        
+        
         btnDescargar.addActionListener(e -> descargarJuego(juego));
         panel.add(btnDescargar, BorderLayout.SOUTH);
 
@@ -148,7 +164,7 @@ public class Juegos_Steam extends JFrame {
         JButton boton = new JButton(texto);
 
         try {
-            // Ruta de la imagen desde la carpeta img_Steam
+            
             String rutaIcono = "/img_Steam/" + nombreIcono;
             ImageIcon icono = new ImageIcon(getClass().getResource(rutaIcono));
             Image img = icono.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH); // Tamaño del ícono
@@ -183,7 +199,7 @@ public class Juegos_Steam extends JFrame {
         return boton;
     }
 
-    private ArrayList<Juego> cargarJuegos() {
+    public ArrayList<Juego> cargarJuegos() {
         File archivoJuegos = new File("juegos.dat");
         ArrayList<Juego> juegos = new ArrayList<>();
 
@@ -191,8 +207,7 @@ public class Juegos_Steam extends JFrame {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivoJuegos))) {
                 juegos = (ArrayList<Juego>) ois.readObject();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Error al cargar los juegos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Error al cargar los juegos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this,
@@ -200,6 +215,39 @@ public class Juegos_Steam extends JFrame {
         }
 
         return juegos;
+    }
+    
+    //ORDENAR FUNCION DONDE SI DESCARGAS EL JUEGO APARECERA EL JUEGO APARECERA EN LA CLASE PANTALLA PERFIL SOLUCIONAR ESO
+    public ArrayList<Juego> cargarJuegosDescargados()throws IOException {
+        ArrayList<Juego> juegosDescargados=new ArrayList<>();
+        
+        File CarpetaUsuarioJuegos=new File(carpetaUsuario,"Juegos");
+        if (!CarpetaUsuarioJuegos.exists() || !CarpetaUsuarioJuegos.isDirectory()) {
+            // Si la carpeta no existe, devolvemos una lista vacia
+            return juegosDescargados;
+        }
+        
+        try{
+            File ArchivoJuego=new File("juegos.dat");
+            if(ArchivoJuego.exists()){
+                try(ObjectInputStream des=new ObjectInputStream(new FileInputStream(ArchivoJuego))){
+                    ArrayList<Juego> TodoslosJuegos=(ArrayList<Juego>) des.readObject();
+                    
+                    //aqui se filtran lode juegos descargados con foreach
+                    for (Juego juego : TodoslosJuegos) {
+                        File ArchivoDescargado=new File(CarpetaUsuarioJuegos,juego.getNombre() + ".dat");
+                        if(ArchivoDescargado.exists()){
+                            juegosDescargados.add(juego);
+                        }
+                    }
+                }
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "ERROR AL CAGAR LOS JUEGOS DECARGADOS "+e.getMessage());
+        }
+        return juegosDescargados;
+        
+     
     }
 
     private void mostrarInformacion(Juego juego) {
@@ -210,9 +258,8 @@ public class Juegos_Steam extends JFrame {
     }
 
     private void descargarJuego(Juego juego) {
-        if (juego.getRutaInstalacion() == null || juego.getRutaInstalacion().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Ruta de instalacion no valida para este juego.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (juego.getRutaInstalacion()==null||juego.getRutaInstalacion().isEmpty()) {
+            JOptionPane.showMessageDialog(this,"Ruta de instalacion no valida para este juego.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -239,12 +286,14 @@ public class Juegos_Steam extends JFrame {
             }
 
             // Archivo destino 
-            File archivoDestino = new File(carpetaDestino, juego.getNombre() + ".dat");
+            archivoDestino = new File(carpetaDestino, juego.getNombre() + ".dat");
             System.out.println("Archivo destino: " + archivoDestino.getAbsolutePath());
+            
+             if (archivoDestino.exists()) {
 
-            if (archivoDestino.exists()) {
-
-                JOptionPane.showMessageDialog(null, "Ya tienes el juego " + juego.getNombre() + " descargado en " + archivoDestino.getAbsolutePath(), "Juego ya descargado", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "El juego ya se no podra decargar nuevamente");
+                btnDescargar.setText("Ya descargado");
+                btnDescargar.setEnabled(false);
                 return;
 
             }
@@ -287,4 +336,8 @@ public class Juegos_Steam extends JFrame {
             JOptionPane.showMessageDialog(this, "Error al guardar los juegos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    
 }
+    
+

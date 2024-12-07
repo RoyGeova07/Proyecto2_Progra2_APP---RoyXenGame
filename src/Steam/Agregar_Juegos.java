@@ -4,6 +4,7 @@
  */
 package Steam;
 
+import RoyExceptions.JuegoDuplicadoException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -12,13 +13,16 @@ import java.util.ArrayList;
 import com.toedter.calendar.JDateChooser;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author royum
  */
 public class Agregar_Juegos extends JFrame {
-
+    
     private JTextField txtTitulo;
     private JComboBox<Generos_Juegos> cbGenero;
     private JTextField txtDesarrollador;
@@ -85,7 +89,7 @@ public class Agregar_Juegos extends JFrame {
         
         JButton btnAgregar = crearBoton("Agregar Juego","/img_steam/agregar_juego.png");
         btnAgregar.setForeground(Color.BLACK);
-        btnAgregar.addActionListener(this::agregarJuego);
+        btnAgregar.addActionListener(e-> agregarJuego());
         add(btnAgregar);
 
        
@@ -131,26 +135,47 @@ public class Agregar_Juegos extends JFrame {
         }
     }
 
-    private void agregarJuego(ActionEvent e) {
+    private void agregarJuego(){
         try {
             // Validar campos
-            if (txtTitulo.getText().isEmpty()
-                    || cbGenero.getSelectedItem() == null
-                    || txtDesarrollador.getText().isEmpty()
-                    || dcFechaLanzamiento.getDate() == null
-                    || txtRutaInstalacion.getText().isEmpty()
-                    || imagenSeleccionada == null) {
-                throw new Exception("Por favor, complete todos los campos y seleccione una imagen valida.");
+            if (txtTitulo.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El titulo del juego no puede estar vacio.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
-           
+            if (cbGenero.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un genero.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (txtDesarrollador.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El desarrollador no puede estar vacio.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (dcFechaLanzamiento.getDate() == null) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha de lanzamiento.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (txtRutaInstalacion.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe especificar una ruta de instalacion.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (imagenSeleccionada == null) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Formatear la fecha
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             String fechaLanzamiento = sdf.format(dcFechaLanzamiento.getDate());
 
-            
+            // Leer la imagen como byte array
             byte[] caratulaBytes = Files.readAllBytes(imagenSeleccionada.toPath());
 
-            // Crear juego
+            // Crear el nuevo objeto Juego
             Juego nuevoJuego = new Juego(
                     txtTitulo.getText(),
                     (Generos_Juegos) cbGenero.getSelectedItem(),
@@ -164,12 +189,21 @@ public class Agregar_Juegos extends JFrame {
             guardarJuegoEnArchivo(nuevoJuego);
 
             JOptionPane.showMessageDialog(this, "Juego agregado exitosamente.");
-            MenuSteam m=new MenuSteam(UsuarioLogueado,archivo);
+            MenuSteam m = new MenuSteam(UsuarioLogueado, archivo);
             m.setVisible(true);
-            dispose(); 
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+
+        }catch (JuegoDuplicadoException ex) {
+
+            JOptionPane.showMessageDialog(this, "No podes guardar juegos con nombre duplicados o imagen duplicadas", "Error", JOptionPane.ERROR_MESSAGE);
+        }catch(Exception ex){
+            
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al guardar el juego.", "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+            
         }
+        // Mostrar mensaje al usuario
+        
     }
     
      private JButton crearBoton(String texto, String rutaIcono) {
@@ -212,7 +246,7 @@ public class Agregar_Juegos extends JFrame {
         return boton;
     }
 
-    private void guardarJuegoEnArchivo(Juego juego) {
+    private void guardarJuegoEnArchivo(Juego juego)throws JuegoDuplicadoException{
         try {
             File archivo = new File(RUTA_ARCHIVO_JUEGOS);
             ArrayList<Juego> juegos = new ArrayList<>();
@@ -226,6 +260,22 @@ public class Agregar_Juegos extends JFrame {
                     System.out.println("Archivo vacio. Se inicializara una nueva lista de juegos.");
                 }
             }
+            
+            //aqui se verifica que no haya juegos duplicados con su nombe e imagen
+            for (Juego j: juegos) {
+                
+                if(j.getNombre().equalsIgnoreCase(juego.getNombre())){
+                    
+                    throw new JuegoDuplicadoException("Ya existe un juego con este titulo: "+j.getNombre());
+                    
+                }
+                if(Arrays.equals(j.getCaratula(), juego.getCaratula())){
+                    
+                    throw new JuegoDuplicadoException("Ya existe un juego con esta imagen");
+                    
+                }
+                    
+            }
 
             juegos.add(juego); // Agregar el nuevo juego
 
@@ -234,8 +284,10 @@ public class Agregar_Juegos extends JFrame {
                 oos.writeObject(juegos);
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        }catch(IOException | ClassNotFoundException e){
+            
+            e.printStackTrace();
+            
         }
     }
 

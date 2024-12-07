@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author royum
  */
 public class Gestion_Perfil extends JFrame {
-    
+        
     private JTree arbol;
     private DefaultTreeModel modeloArbol;
     private File carpeta;
@@ -280,6 +280,18 @@ public class Gestion_Perfil extends JFrame {
             File archivo = new File(DirectorioActual, nombreArchivo);
             if (archivo.exists() && archivo.delete()) {
                 JOptionPane.showMessageDialog(this, "Archivo " +nombreArchivo+  " eliminado.");
+                
+                File CarpetaUsuario=new File("UsuariosGestion/" + nombreUsuario + "/Juegos");
+                File juegoenCarpeta=new File(CarpetaUsuario,nombreArchivo);
+                
+                if (juegoenCarpeta.exists()) {
+                    if (juegoenCarpeta.delete()) {
+                        JOptionPane.showMessageDialog(this, "El juego " + nombreArchivo + " también fue eliminado de la carpeta de Juegos.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No se pudo eliminar el juego " + nombreArchivo + " de la carpeta de Juegos.");
+                    }
+                }
+                
                 dispose();
                 new Gestion_Perfil(nombreUsuario).setVisible(true);
                 mostrarContenidoCarpeta(DirectorioActual);
