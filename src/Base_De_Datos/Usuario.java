@@ -24,7 +24,7 @@ public class Usuario implements Serializable {
     private ArrayList<Musica> bibliotecaMusical;
     private ArrayList<Juego> bibliotecaJuego;
     private ArrayList<MensajeChat> AreaChat;
-    private String foto;
+    private String rutaFotoPerfil; // Nueva ruta para la foto de perfil
 
     public Usuario(String nombre, String password, boolean esAdmin) throws IOException {
         this.nombre = nombre;
@@ -33,6 +33,7 @@ public class Usuario implements Serializable {
         this.bibliotecaMusical = new ArrayList<>();
         this.bibliotecaJuego = new ArrayList<>();
         this.AreaChat = new ArrayList<>();
+        this.rutaFotoPerfil= "/img_menuprin/perfil.jpg";
     }
 
     public String getNombre() {
@@ -70,6 +71,14 @@ public class Usuario implements Serializable {
 
     public void recibirMensaje(MensajeChat mensaje) {
         this.AreaChat.add(mensaje);
+    }
+    
+      public String getRutaFotoPerfil() {
+        return rutaFotoPerfil;
+    }
+
+    public void setRutaFotoPerfil(String rutaFotoPerfil) {
+        this.rutaFotoPerfil = rutaFotoPerfil;
     }
 
 }

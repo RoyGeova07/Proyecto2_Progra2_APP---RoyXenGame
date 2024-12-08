@@ -14,7 +14,7 @@ public class BarraInferior extends VBox {
     
     public BarraInferior(){
         
-        getChildren().addAll(BarraTiempo.getBarra(),new Botones());//
+        getChildren().addAll(BarraTiempo.getBarra(),new Botones());
         
     }
     

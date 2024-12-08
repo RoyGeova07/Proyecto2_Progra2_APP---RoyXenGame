@@ -64,5 +64,20 @@ public class InfoCancion extends VBox{
         
     }
     
+    //ESTA FUNCION ES CLAVEEEE
+    public static boolean DosCamposDispnibles() {
+        
+    int numero=0;
+
+    if (!etTitulo.getText().contains("No disponible")) numero++;
+    if (!etArtista.getText().contains("No disponible")) numero++;
+    if (!etAlbum.getText().contains("No disponible")) numero++;
+    if (!etDuracion.getText().contains("No disponible")) numero++;
+    if (!etRuta.getText().contains("No disponible")) numero++;
+
+    return numero >= 2; // Devuelve true si al menos dos campos tienen informacion
+    
+    }
+
     
 }

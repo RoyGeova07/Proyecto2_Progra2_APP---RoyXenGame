@@ -4,6 +4,7 @@
  */
 package Reproductor;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -72,7 +73,21 @@ public class Botones extends HBox{
        pause1.setOnAction(e-> Musica.pause());
        reset1.setOnAction(e-> Musica.stop());
        
-       
+        // Hilo para monitorear el estado de la información de la cancioncita
+        new Thread(() -> {
+            while (true) {
+                Platform.runLater(() -> {
+                    boolean anyInfoAvailable = InfoCancion.DosCamposDispnibles();
+                    play1.setDisable(!anyInfoAvailable); // Habilitar si hay alguna información disponible
+                });
+                try {
+                    Thread.sleep(500); // Pausa breve para no sobrecargar el hilo
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     

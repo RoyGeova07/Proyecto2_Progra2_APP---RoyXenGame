@@ -78,23 +78,5 @@ public class Musica {
         
     }
      
-     public static void ResetearReproductor(){
-         
-         archivo=null;
-         if(reproductor!=null){
-             
-             reproductor.stop();
-             reproductor=null;
-             
-         }
-         InfoCancion.ActualizarInformacion(null, null, null, null, null, null);
-         
-     }
-     
-     public static void setVolumen(double volumen){
-         
-         reproductor.setVolume(volumen);
-         
-     }
             
 }

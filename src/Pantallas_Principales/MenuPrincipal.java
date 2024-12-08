@@ -10,6 +10,7 @@ import Base_De_Datos.ManejoUsuarios;
 import Base_De_Datos.Usuario;
 import Perfil_De_Usuario.Gestion_Perfil;
 import Perfil_De_Usuario.Pantalla_Perfil;
+import Reproductor.InfoCancion;
 import Reproductor.MenuMusica;
 import Reproductor.Musica;
 import Reproductor.VentanaPrincipal;
@@ -86,7 +87,7 @@ public class MenuPrincipal extends JFrame {
 
         // Crear botones con imagenes
         Juegos = crearBoton("Steam", "/img_menuprin/juego1.png");
-        Musicas = crearBoton("Reproductor", "/img_menuprin/musica1.png");
+        Musicas = crearBoton("Spotify", "/img_menuprin/musica1.png");
         Discord = crearBoton("Discord", "/img_menuprin/discord1.png");
         Perfil = crearBoton("Mi Perfil", "/img_menuprin/perfil.jpg");
         Cerrar_Sesion = crearBoton("Cerrar Sesion", "/img_menuprin/cerrar_sesion.png");
@@ -240,7 +241,7 @@ public class MenuPrincipal extends JFrame {
                 return;
             }
             //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
-            String[] opciones = {"Listar Usuarios", "Ingresar carpetas Usuarios","Borrar Usuarios"};
+            String[] opciones = {"Listar Usuarios", "Ingresar carpetas Usuarios","Borrar Usuarios","Ingresar a a Biblioteca de usuarios"};
 //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
             //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
             
@@ -341,6 +342,57 @@ public class MenuPrincipal extends JFrame {
 
                 }
 
+            }else if(opcion==3){
+                
+                String NombreUsuarioBuscar=JOptionPane.showInputDialog(null,"Ingrese el nombre de usuario para ingresar a su perfil");
+                
+                if(NombreUsuarioBuscar!=null&&!NombreUsuarioBuscar.trim().isEmpty()){
+                    
+                    Usuario usuario=manejoUsuarios.ObtenerUsuario(NombreUsuarioBuscar);
+                    if(usuario!=null){
+                        if(NombreUsuarioBuscar.equals(nombreUsuario)){
+                            
+                            int confirmacion = JOptionPane.showConfirmDialog(null,"Estas intentando ver tu propio perfil en vista de administrador. ¿Estas seguro?","Confirmacion",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+                            
+                            if (confirmacion == JOptionPane.YES_OPTION) {
+                                try {
+                                    dispose();
+                                    Pantall_Perfil_Admin p = new Pantall_Perfil_Admin(nombreUsuario, usuario.getNombre(), this);
+                                    this.setVisible(false);
+                                    p.setVisible(true);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+
+                        }else{
+
+                            try{
+                                
+                                dispose();
+                                Pantall_Perfil_Admin p = new Pantall_Perfil_Admin(nombreUsuario, usuario.getNombre(), this);
+                                this.setVisible(false);
+                                p.setVisible(true);
+
+                            }catch(IOException ex){
+
+                                Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, e);
+
+                            }
+
+                        }
+                    }else{
+                        
+                        JOptionPane.showMessageDialog(null, "El usuario \"" + NombreUsuarioBuscar + "\" no existe.", "Usuario no encontrado",JOptionPane.ERROR_MESSAGE);
+                        
+                    }
+                    
+                }else{
+                    
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un nombre de usuario valido.", "Error", JOptionPane.WARNING_MESSAGE);
+                    
+                }
+                
             }
         });
             
@@ -350,7 +402,7 @@ public class MenuPrincipal extends JFrame {
                 MenuInicio inicio = new MenuInicio();
                 inicio.setVisible(true);
                 dispose();
-
+                
         });
         
         
@@ -460,9 +512,7 @@ public class MenuPrincipal extends JFrame {
 
     private void detenerMusica() {
         
-        //Musica.ResetearReproductor();
         Musica.stop(); 
-        
         
     }
 

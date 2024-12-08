@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ *  
  * @author royum
  */
 public final class Juegos_Steam extends JFrame {
@@ -147,7 +147,7 @@ public final class Juegos_Steam extends JFrame {
             btnDescargar.setText("Ya descargado");
             btnDescargar.setEnabled(false);
             
-        }else{
+        }else{  
             
             btnDescargar.addActionListener(e-> descargarJuego(juego));
             
@@ -231,8 +231,7 @@ public final class Juegos_Steam extends JFrame {
             File ArchivoJuego=new File("juegos.dat");
             if(ArchivoJuego.exists()){
                 try(ObjectInputStream des=new ObjectInputStream(new FileInputStream(ArchivoJuego))){
-                    ArrayList<Juego> TodoslosJuegos=(ArrayList<Juego>) des.readObject();
-                    
+                    ArrayList<Juego> TodoslosJuegos=(ArrayList<Juego>) des.readObject();                    
                     //aqui se filtran lode juegos descargados con foreach
                     for (Juego juego : TodoslosJuegos) {
                         File ArchivoDescargado=new File(CarpetaUsuarioJuegos,juego.getNombre() + ".dat");
@@ -246,8 +245,7 @@ public final class Juegos_Steam extends JFrame {
             JOptionPane.showMessageDialog(null, "ERROR AL CAGAR LOS JUEGOS DECARGADOS "+e.getMessage());
         }
         return juegosDescargados;
-        
-     
+       
     }
 
     private void mostrarInformacion(Juego juego) {

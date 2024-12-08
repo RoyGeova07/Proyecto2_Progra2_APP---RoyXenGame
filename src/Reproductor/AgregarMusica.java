@@ -41,7 +41,8 @@ public class AgregarMusica {
                             + "Titulo: " + NuevaCancion.getTitulo() + "\n"
                             + "Artista: " + NuevaCancion.getArtista() + "\n"
                             + "Album: " + NuevaCancion.getAlbum() + "\n"
-                            + "Duracion: " + NuevaCancion.getDuracion());
+                            + "Duracion: " + NuevaCancion.getDuracion()+ "\n"
+                            + "Ruta Archivo: " +NuevaCancion.getRutaArchivo());
                     
                     GuardarCancionEnArchivo(NuevaCancion);
                     

@@ -10,10 +10,8 @@ import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.io.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *

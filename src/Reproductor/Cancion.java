@@ -30,7 +30,7 @@ public class Cancion implements Serializable{
     private String Album;
     private String Duracion;
     private byte[] Imagen; 
-    private  String RutaArchivo;  
+    private  String RutaArchivo; 
 
     public Cancion(String Titulo, String Artista, String Album, String Duracion, byte[] Imagen, String RutaArchivo) {
         this.Titulo = Titulo;
@@ -126,8 +126,6 @@ public class Cancion implements Serializable{
         }
         
     }
-    
-    
 
     public String getTitulo() {
         return Titulo;
@@ -179,5 +177,5 @@ public class Cancion implements Serializable{
         this.Imagen = Imagen;
     }
 
-    
+   
 }
