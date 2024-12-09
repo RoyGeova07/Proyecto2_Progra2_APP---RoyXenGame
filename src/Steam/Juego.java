@@ -4,7 +4,6 @@
  */
 package Steam;
 
-import java.awt.Image;
 import java.io.Serializable;
 
 /**

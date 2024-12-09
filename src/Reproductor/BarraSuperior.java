@@ -5,12 +5,10 @@
 package Reproductor;
 
 import Pantallas_Principales.MenuPrincipal;
-import java.io.File;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**

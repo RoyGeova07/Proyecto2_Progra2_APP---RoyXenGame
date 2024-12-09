@@ -5,8 +5,6 @@
 package Reproductor;
 
 import java.io.File;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;

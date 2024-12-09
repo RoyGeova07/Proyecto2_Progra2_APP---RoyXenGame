@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -260,10 +260,12 @@ public final class Musicas extends JFrame{
             System.out.println("Archivo Destino: " + ArchivoDestino.getAbsolutePath());
 
             if(ArchivoDestino.exists()){
+                
                 JOptionPane.showMessageDialog(this, "El archivo ya fue descargado: " + archivoOriginal.getName(), "Cancion ya descargada", JOptionPane.ERROR_MESSAGE);
                 btnDescargar.setText("Ya Descargada");
                 btnDescargar.setEnabled(false);
                 return;
+                
             }
 
             //se copiar el archivo

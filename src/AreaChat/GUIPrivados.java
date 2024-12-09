@@ -6,7 +6,6 @@ package AreaChat;
 
 import Base_De_Datos.ManejoUsuarios;
 import Base_De_Datos.Usuario;
-import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -121,7 +120,7 @@ public class GUIPrivados extends JFrame{
         
         if(OtroUsuario.equalsIgnoreCase(UsuarioEnSesion)){
             
-            JOptionPane.showMessageDialog(null, "No puedes abrir una conversacion contigomismo");
+            JOptionPane.showMessageDialog(null, "No puedes abrir una conversacion contig omismo");
             return;
             
         }
@@ -164,7 +163,7 @@ public class GUIPrivados extends JFrame{
         
         if(Otrousuario==null){
             
-            JOptionPane.showMessageDialog(null, "JUGADOR NO SELECCIONADO");
+            JOptionPane.showMessageDialog(null, "USUARIO NO SELECCIONADO");
             return;
             
         }
@@ -175,6 +174,9 @@ public class GUIPrivados extends JFrame{
             return;
             
         }
+        
+         
+        
         
         
         try{

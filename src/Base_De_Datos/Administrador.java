@@ -4,7 +4,7 @@
  */
 package Base_De_Datos;
 
-import java.io.File;
+import java.io.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -61,6 +61,7 @@ public final class Administrador extends Usuario {
 
     }
   
+    //QUE TAMBIEN ELIMINE LOS MENSAJES QUE HIZO DESDE CHAT GENERAL
     public void BorrarUsuario(String nombre) {
 
         ManejoUsuarios manejoUsuarios = new ManejoUsuarios();
@@ -76,6 +77,12 @@ public final class Administrador extends Usuario {
             if (carpetaUsuario.exists() && carpetaUsuario.isDirectory()) {
                 EliminarCarpetaRecursiva(carpetaUsuario);
             }
+            
+            //aqui se elimina los mensajes del chat general del usuario
+            EliminarMensajesChatGeneral(nombre);
+            
+            //aqui se eliminaran los chats privados del usuario
+            EliminarChatsPrivados(nombre);
 
             // Guardar los cambios en el archivo usuarios.dat
             manejoUsuarios.GuardarUsuarios();
@@ -108,5 +115,75 @@ public final class Administrador extends Usuario {
         CarpetaUsuario.delete();
         
     }
+
+    private void EliminarMensajesChatGeneral(String nombreUsuario) {
+        File archivoChatGeneral=new File("historial_chat.dat");
+        File archivoTemporal=new File("temp_chat.dat");
+
+        try (BufferedReader lector=new BufferedReader(new FileReader(archivoChatGeneral)); 
+            BufferedWriter escritor=new BufferedWriter(new FileWriter(archivoTemporal))) {
+
+            String linea;
+            while ((linea=lector.readLine()) != null) {
+                
+                String[] datos=linea.split("::", 3);
+                if (datos.length==3&&!datos[1].equals(nombreUsuario)) {
+                    
+                    escritor.write(linea);
+                    escritor.newLine();
+                    
+                }
+                
+            }
+        } catch (IOException e) {
+            
+            JOptionPane.showMessageDialog(null, "ERROR AL ELIMINAR LOS MENSAJES DEL CHAT GENERAL"+e.getMessage());
+            
+        }
+
+        //aqui se reemplazaa el archivo original con el temporal
+        if (archivoChatGeneral.delete()) {
+            
+            archivoTemporal.renameTo(archivoChatGeneral);
+            
+        } else {
+            
+          JOptionPane.showMessageDialog(null, "NO SE PUDO REEMPLAZAR EL ARCHIVO CHAT GENERAL");
+            
+        }
+    }
+
+    private void EliminarChatsPrivados(String nombre) {
+        
+        File CarpetaChatsPrivados=new File("ChatsPrivados");
+        File[] Archivos=CarpetaChatsPrivados.listFiles();
+        
+        if(Archivos!=null){
+            
+            for (File archivo : Archivos) {
+                
+                String NombreArchivo=archivo.getName();
+                if(NombreArchivo.contains(nombre)){
+                    
+                    if(archivo.delete()){
+                        
+                        JOptionPane.showMessageDialog(null, "Chat Privado eliminado: "+archivo.getName());
+                        
+                    }else{
+                        
+                        JOptionPane.showMessageDialog(null, "NO SE PUDO ELIMINAR EL CHAT PRIVADO");
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+        
+    
+    
     
 }

@@ -129,7 +129,7 @@ public class LogIn extends JFrame {
         buttonPanel.setOpaque(false); // Transparente
 
         iniciarSesionButton = crearBoton("Iniciar Sesion");
-        cancelarButton = crearBoton("Cancelar");
+        cancelarButton = crearBoton("Vaciar");
         volverButton = crearBoton("Volver");
 
         iniciarSesionButton.setBackground(Color.BLUE);

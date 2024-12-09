@@ -5,7 +5,6 @@
 package Pantallas_Principales;
 
 import Base_De_Datos.ManejoUsuarios;
-import Base_De_Datos.Usuario;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;

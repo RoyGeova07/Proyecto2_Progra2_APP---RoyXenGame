@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  */
 public class Discord extends JFrame{
     
+        
     private static final String ARCHIVO_CHAT = "historial_chat.dat";//variable para el chat en general.
     private  String usuarioEnSesion;
     private JPanel panelMensajes;

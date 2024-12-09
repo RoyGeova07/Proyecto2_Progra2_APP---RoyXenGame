@@ -1,4 +1,4 @@
-  /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author royum
  */
 public class Gestion_Perfil extends JFrame {
-        
+
     private JTree arbol;
     private DefaultTreeModel modeloArbol;
     private File carpeta;
@@ -30,109 +30,114 @@ public class Gestion_Perfil extends JFrame {
     MenuPrincipal menu;
     private Usuario user;
 
-  public Gestion_Perfil(String nombreUsuario) {
-    this.nombreUsuario = nombreUsuario;
+    public Gestion_Perfil(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
 
-    // Carpeta raiz de gestion
-    File carpetaUsuariosGestion = new File("UsuariosGestion");
-    if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
-        JOptionPane.showMessageDialog(null, 
-            "La carpeta raiz 'UsuariosGestion' no existe. Por favor, verifica la configuracion.");
-        dispose();
-        return;
-    }
-
-    // Carpeta del usuario actual
-    carpeta = new File(carpetaUsuariosGestion, nombreUsuario);
-    if (!carpeta.exists() || !carpeta.isDirectory()) {
-        JOptionPane.showMessageDialog(null, 
-            "El usuario \"" + nombreUsuario + "\" no tiene una carpeta asignada. Por favor, verifica el sistema.");
-        dispose();
-        return;
-    }
-
-    // Configuracion del JFrame
-    setTitle("APP RoyXen -> Archivos de " + nombreUsuario);
-    setSize(1000, 700);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    setLocationRelativeTo(null);
-    setLayout(new BorderLayout());
-
-    // Crear el arbol de directorios
-    JPanel panelIzquierdo = new JPanel(new BorderLayout());
-    panelIzquierdo.setPreferredSize(new Dimension(250, 0));
-    panelIzquierdo.setBackground(Color.BLACK);
-
-    DefaultMutableTreeNode RaizDeNodo = new DefaultMutableTreeNode(carpeta.getName());
-    modeloArbol = new DefaultTreeModel(RaizDeNodo);
-    arbol = new JTree(modeloArbol);
-    cargarDirectorio(carpeta, RaizDeNodo);
-
-    arbol.addTreeSelectionListener(e -> {
-        DefaultMutableTreeNode SeleccionarNodo = (DefaultMutableTreeNode) arbol.getLastSelectedPathComponent();
-        if (SeleccionarNodo == null) {
-            DirectorioActual = null;
+        // Carpeta raiz de gestion
+        File carpetaUsuariosGestion = new File("UsuariosGestion");
+        if (!carpetaUsuariosGestion.exists() || !carpetaUsuariosGestion.isDirectory()) {
+            JOptionPane.showMessageDialog(null,
+                    "La carpeta raiz 'UsuariosGestion' no existe. Por favor, verifica la configuracion.");
+            dispose();
             return;
         }
 
-        String rutaRelativa = getRutaDesdeNodo(SeleccionarNodo).trim();
-        File directorioSeleccionado = new File(carpeta, rutaRelativa);
-
-        if (directorioSeleccionado.exists() && directorioSeleccionado.isDirectory()) {
-            DirectorioActual = directorioSeleccionado;
-            mostrarContenidoCarpeta(DirectorioActual);
-        } else {
-            DirectorioActual = null;
+        // Carpeta del usuario actual
+        carpeta = new File(carpetaUsuariosGestion, nombreUsuario);
+        if (!carpeta.exists() || !carpeta.isDirectory()) {
+            JOptionPane.showMessageDialog(null,
+                    "El usuario \"" + nombreUsuario + "\" no tiene una carpeta asignada. Por favor, verifica el sistema.");
+            dispose();
+            return;
         }
-    });
 
-    JScrollPane Scroll_Arbol = new JScrollPane(arbol);
-    Scroll_Arbol.setBackground(Color.BLACK);
-    panelIzquierdo.add(Scroll_Arbol, BorderLayout.CENTER);
-    add(panelIzquierdo, BorderLayout.WEST);
+        // Configuracion del JFrame
+        setTitle("APP RoyXen -> Archivos de " + nombreUsuario);
+        setSize(1000, 700);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-    // Panel de archivos
-    panelArchivos = new JPanel();
-    panelArchivos.setLayout(new GridLayout(0, 4, 15, 15));
-    panelArchivos.setBackground(Color.DARK_GRAY);
-    JScrollPane scrollArchivos = new JScrollPane(panelArchivos);
-    add(scrollArchivos, BorderLayout.CENTER);
+        // Crear el arbol de directorios
+        JPanel panelIzquierdo = new JPanel(new BorderLayout());
+        panelIzquierdo.setPreferredSize(new Dimension(250, 0));
+        panelIzquierdo.setBackground(Color.BLACK);
 
-    // Panel de botones
-    JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    panelBotones.setBackground(new Color(45, 45, 45));
+        DefaultMutableTreeNode RaizDeNodo = new DefaultMutableTreeNode(carpeta.getName());
+        modeloArbol = new DefaultTreeModel(RaizDeNodo);
+        arbol = new JTree(modeloArbol);
+        cargarDirectorio(carpeta, RaizDeNodo);
 
-    JButton agregarButton = new JButton("Agregar Musicas");
-    configurarBoton(agregarButton, new Color(120, 180, 180));
-    agregarButton.addActionListener(e -> agregarArchivosMusica());
-    panelBotones.add(agregarButton);
+        arbol.addTreeSelectionListener(e -> {
+            DefaultMutableTreeNode SeleccionarNodo = (DefaultMutableTreeNode) arbol.getLastSelectedPathComponent();
+            if (SeleccionarNodo == null) {
+                DirectorioActual = null;
+                return;
+            }
 
-    JButton eliminarButton = new JButton("Eliminar");
-    configurarBoton(eliminarButton, new Color(220, 20, 60));
-    eliminarButton.addActionListener(e -> eliminarArchivo());
-    panelBotones.add(eliminarButton);
+            String rutaRelativa = getRutaDesdeNodo(SeleccionarNodo).trim();
+            File directorioSeleccionado = new File(carpeta, rutaRelativa);
 
-    JButton renombrarButton = new JButton("Renombrar");
-    configurarBoton(renombrarButton, new Color(50, 150, 50));
-    renombrarButton.addActionListener(e -> renombrarArchivo());
-    panelBotones.add(renombrarButton);
+            if (directorioSeleccionado.exists() && directorioSeleccionado.isDirectory()) {
+                DirectorioActual = directorioSeleccionado;
+                mostrarContenidoCarpeta(DirectorioActual);
+            } else {
+                DirectorioActual = null;
+            }
+        });
 
-    JButton Volver = new JButton("Volver");
-    configurarBoton(Volver, new Color(120, 20, 60));
-    Volver.addActionListener(e -> {
-       
-        try {
-            menu = new MenuPrincipal(nombreUsuario,archivoUsuario);
-        } catch (IOException ex) {
-            Logger.getLogger(Gestion_Perfil.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        menu.setVisible(true);
-        dispose();
-    });
-    panelBotones.add(Volver);
+        JScrollPane Scroll_Arbol = new JScrollPane(arbol);
+        Scroll_Arbol.setBackground(Color.BLACK);
+        panelIzquierdo.add(Scroll_Arbol, BorderLayout.CENTER);
+        add(panelIzquierdo, BorderLayout.WEST);
 
-    add(panelBotones, BorderLayout.NORTH);
-}
+        // Panel de archivos
+        panelArchivos = new JPanel();
+        panelArchivos.setLayout(new GridLayout(0, 4, 15, 15));
+        panelArchivos.setBackground(Color.DARK_GRAY);
+        JScrollPane scrollArchivos = new JScrollPane(panelArchivos);
+        add(scrollArchivos, BorderLayout.CENTER);
+
+        // Panel de botones
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelBotones.setBackground(new Color(45, 45, 45));
+
+        JButton agregarButton = new JButton("Agregar Musicas");
+        configurarBoton(agregarButton, new Color(120, 180, 180));
+        agregarButton.addActionListener(e -> agregarArchivosMusica());
+        panelBotones.add(agregarButton);
+
+        JButton eliminarButton = new JButton("Eliminar");
+        configurarBoton(eliminarButton, new Color(220, 20, 60));
+        eliminarButton.addActionListener(e -> eliminarArchivo());
+        panelBotones.add(eliminarButton);
+
+        JButton renombrarButton = new JButton("Renombrar");
+        configurarBoton(renombrarButton, new Color(50, 150, 50));
+        renombrarButton.addActionListener(e -> renombrarArchivo());
+        panelBotones.add(renombrarButton);
+
+        JButton crearButton = new JButton("Crear");
+        configurarBoton(crearButton, new Color(75, 75, 255));
+        crearButton.addActionListener(e -> crearArchivoOCarpeta());
+        panelBotones.add(crearButton);
+
+        JButton Volver = new JButton("Volver");
+        configurarBoton(Volver, new Color(120, 20, 60));
+        Volver.addActionListener(e -> {
+
+            try {
+                menu = new MenuPrincipal(nombreUsuario, archivoUsuario);
+            } catch (IOException ex) {
+                Logger.getLogger(Gestion_Perfil.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            menu.setVisible(true);
+            dispose();
+        });
+        panelBotones.add(Volver);
+
+        add(panelBotones, BorderLayout.NORTH);
+    }
 
     private void configurarBoton(JButton boton, Color color) {
         boton.setForeground(Color.WHITE);
@@ -274,16 +279,16 @@ public class Gestion_Perfil extends JFrame {
     }
 
     private void eliminarArchivo() {
-        
+
         String nombreArchivo = JOptionPane.showInputDialog(this, "Ingrese el nombre del archivo a eliminar:");
         if (nombreArchivo != null && !nombreArchivo.trim().isEmpty()) {
             File archivo = new File(DirectorioActual, nombreArchivo);
             if (archivo.exists() && archivo.delete()) {
-                JOptionPane.showMessageDialog(this, "Archivo " +nombreArchivo+  " eliminado.");
-                
-                File CarpetaUsuario=new File("UsuariosGestion/" + nombreUsuario + "/Juegos");
-                File juegoenCarpeta=new File(CarpetaUsuario,nombreArchivo);
-                
+                JOptionPane.showMessageDialog(this, "Archivo " + nombreArchivo + " eliminado.");
+
+                File CarpetaUsuario = new File("UsuariosGestion/" + nombreUsuario + "/Juegos");
+                File juegoenCarpeta = new File(CarpetaUsuario, nombreArchivo);
+
                 if (juegoenCarpeta.exists()) {
                     if (juegoenCarpeta.delete()) {
                         JOptionPane.showMessageDialog(this, "El juego " + nombreArchivo + " también fue eliminado de la carpeta de Juegos.");
@@ -291,7 +296,7 @@ public class Gestion_Perfil extends JFrame {
                         JOptionPane.showMessageDialog(this, "No se pudo eliminar el juego " + nombreArchivo + " de la carpeta de Juegos.");
                     }
                 }
-                
+
                 dispose();
                 new Gestion_Perfil(nombreUsuario).setVisible(true);
                 mostrarContenidoCarpeta(DirectorioActual);
@@ -301,4 +306,54 @@ public class Gestion_Perfil extends JFrame {
         }
     }
 
+    private void crearArchivoOCarpeta() {
+
+        if (DirectorioActual == null || !DirectorioActual.exists()) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un directorio valido.");
+            return;
+        }
+
+        String[] opciones = {"Archivo", "Carpeta"};
+        int seleccion = JOptionPane.showOptionDialog(this,
+                "¿Que desea crear?",
+                "Crear",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]);
+
+        if (seleccion == 0) { // Crear archivo
+            String nombreArchivo = JOptionPane.showInputDialog(this, "Ingrese el nombre del archivo:");
+            if (nombreArchivo != null && !nombreArchivo.trim().isEmpty()) {
+                File nuevoArchivo = new File(DirectorioActual, nombreArchivo);
+                try {
+                    if (nuevoArchivo.createNewFile()) {
+                        JOptionPane.showMessageDialog(this, "Archivo creado exitosamente.");
+                        dispose();
+                    new Gestion_Perfil(nombreUsuario).setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No se pudo crear el archivo. Verifique si ya existe.");
+                    }
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(this, "Error al crear archivo: " + e.getMessage());
+                }
+            }
+        } else if (seleccion == 1) { // Crear carpeta
+            String nombreCarpeta = JOptionPane.showInputDialog(this, "Ingrese el nombre de la carpeta:");
+            if (nombreCarpeta != null && !nombreCarpeta.trim().isEmpty()) {
+                File nuevaCarpeta = new File(DirectorioActual, nombreCarpeta);
+                if (nuevaCarpeta.mkdir()) {
+                    JOptionPane.showMessageDialog(this, "Carpeta creada exitosamente.");
+                    dispose();
+                    new Gestion_Perfil(nombreUsuario).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo crear la carpeta. Verifique si ya existe.");
+                }
+            }
+        }
+
+        // Actualizar la vista del contenido
+        mostrarContenidoCarpeta(DirectorioActual);
+    }
 }

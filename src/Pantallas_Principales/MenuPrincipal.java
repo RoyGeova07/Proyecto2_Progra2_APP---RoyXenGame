@@ -10,7 +10,6 @@ import Base_De_Datos.ManejoUsuarios;
 import Base_De_Datos.Usuario;
 import Perfil_De_Usuario.Gestion_Perfil;
 import Perfil_De_Usuario.Pantalla_Perfil;
-import Reproductor.InfoCancion;
 import Reproductor.MenuMusica;
 import Reproductor.Musica;
 import Reproductor.VentanaPrincipal;
@@ -68,7 +67,7 @@ public class MenuPrincipal extends JFrame {
         setTitle("APP RoyXen -> Cuenta de " + nombreUsuario);
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Ventana maximizada
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
+        
 
         // Crear un JLayeredPane para manejar fondo y botones
         JLayeredPane layeredPane = new JLayeredPane();
@@ -281,7 +280,7 @@ public class MenuPrincipal extends JFrame {
                                 + File.separator + "UsuariosGestion"
                                 + File.separator + UsuarioIngresado);
 
-                        PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, this, archivoUsuario);
+                            PantallaAdmin adminPanel = new PantallaAdmin(DirectorioAdmin, this, archivoUsuario);
                         adminPanel.setVisible(true);
                         this.setVisible(false);
 
