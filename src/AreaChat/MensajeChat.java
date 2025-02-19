@@ -18,6 +18,8 @@ public class MensajeChat implements Serializable {
     private String mensaje;
     private String remitente;
     private String Timestamp;
+      private String destinatario;
+    
 
     public MensajeChat(String mensaje, String remitente) {
         this.mensaje = mensaje;

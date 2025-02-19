@@ -134,7 +134,7 @@ public class CrearUsuario extends JFrame {
     }
 
     private JPanel crearPanelBotones() {
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 10, 10)); // 1 fila, 3 columnas
+        JPanel buttonPanel = new JPanel(new GridLayout(1,3,10,10)); // 1 fila, 3 columnas
         buttonPanel.setOpaque(false); // Transparente
 
         crearUsuario = crearBoton("Crear");
@@ -152,21 +152,25 @@ public class CrearUsuario extends JFrame {
     private JButton crearBoton(String texto) {
         JButton boton = new JButton(texto);
         boton.setFont(new Font("Consolas", Font.BOLD, 14)); // Tamaño reducido
-        boton.setPreferredSize(new Dimension(130, 40)); // Tamaño ajustado
+        boton.setPreferredSize(new Dimension(130,40)); // Tamaño ajustado
         boton.setBackground(Color.BLUE);
         boton.setForeground(Color.WHITE);
         boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createLineBorder(new Color(0, 122, 204), 2, true));
+        boton.setBorder(BorderFactory.createLineBorder(new Color(0,122,204),2,true));
 
         // Efecto de hover (cambiar color al pasar el mouse)
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
+                
                 boton.setContentAreaFilled(true);
                 boton.setBackground(new Color(0, 0, 0, 50)); // Negro con transparencia
+                
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
+                
                 boton.setBackground(Color.BLUE);
+                
             }
         });
         return boton;
@@ -174,13 +178,17 @@ public class CrearUsuario extends JFrame {
 
     private void cargarFondo(String ruta) {
         try {
+            
             ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
             Image img = icon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT); // Escala el GIF
             fondo.setIcon(new ImageIcon(img));
             fondo.setHorizontalAlignment(SwingConstants.CENTER); // Centra el GIF
             fondo.setVerticalAlignment(SwingConstants.CENTER);
+            
         } catch (Exception e) {
+            
             System.out.println("No se pudo cargar el fondo: " + ruta);
+            
         }
     }
 

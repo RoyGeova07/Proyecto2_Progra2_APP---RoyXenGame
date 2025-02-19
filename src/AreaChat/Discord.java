@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -9,6 +9,7 @@ import Pantallas_Principales.MenuPrincipal;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +27,11 @@ public class Discord extends JFrame{
     private File archivosHistorial;//variable para el historial, del usuario unico
     private File archivosUSUARIO;//variable para abrir el menuPrincipal     
     private Usuario user;
+      private Socket socket;
+    private ObjectOutputStream salida;
+    private ObjectInputStream entrada;
+    private Thread listenerThread;
+    
 
     public Discord(String usuarioEnSesion) throws IOException {
         this.usuarioEnSesion = usuarioEnSesion;
@@ -43,6 +49,7 @@ public class Discord extends JFrame{
             archivosHistorial.createNewFile(); // Crear el archivo si no existe
         }
 
+        configurarConexionTiempoReal();
         configurarVentana();
         CargarMensajes();
     }
@@ -169,6 +176,9 @@ public class Discord extends JFrame{
         if(!texto.isEmpty()){
             
             MensajeChat mensaje=new MensajeChat(texto,usuarioEnSesion);
+            //se entra al servidor
+            salida.writeObject(mensaje);
+            salida.flush();
             
             GuardarMensajeArchivoIndividual(mensaje);
             GuardarMensajeArchivoGeneral(mensaje);
@@ -307,5 +317,29 @@ public class Discord extends JFrame{
         m.setVisible(true);
     }
 
+    
+      private void configurarConexionTiempoReal() {
+        try {
+            socket = new Socket("localhost", 12345);
+            salida = new ObjectOutputStream(socket.getOutputStream());
+            entrada = new ObjectInputStream(socket.getInputStream());
+
+            listenerThread = new Thread(() -> {
+                try {
+                    while (true) {
+                        MensajeChat mensaje = (MensajeChat) entrada.readObject();
+                        SwingUtilities.invokeLater(() -> AgregarMensajePanel(mensaje));
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    System.err.println("Conexión cerrada: " + e.getMessage());
+                }
+            });
+            listenerThread.start();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error conectándose al servidor de chat.");
+        }
+    }
+      
+      
    
 }

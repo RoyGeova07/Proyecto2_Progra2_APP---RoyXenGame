@@ -24,12 +24,17 @@ public class DiscordPrivado extends JFrame {
     private JPanel panelMensajes;
     private JTextField campoMensaje;
     private JScrollPane scrollPane;
+    private ClienteChatPrivado clientePrivado;
 
     public DiscordPrivado(String usuarioEnSesion) throws IOException {
         this.usuarioEnSesion = usuarioEnSesion;
         this.gestorChats = new ChatsPrivados();
 
         ConfigurarPanel();
+        
+        clientePrivado = new ClienteChatPrivado("localhost", 54321, usuarioEnSesion);
+        clientePrivado.escucharMensajes(this::nuevoMensaje);
+
     }
     
     private void ConfigurarPanel(){
@@ -87,12 +92,30 @@ public class DiscordPrivado extends JFrame {
         panelMensajes.revalidate();
         panelMensajes.repaint();
     }
+    
+      private void nuevoMensaje(MensajeChat mensaje) {
+        if (mensaje.getRemitente().equals(otroUsuario)) {
+            SwingUtilities.invokeLater(() -> {
+                JLabel etiquetaMensaje = new JLabel(mensaje.toString());
+                etiquetaMensaje.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                panelMensajes.add(etiquetaMensaje);
+                panelMensajes.revalidate();
+                panelMensajes.repaint();
+            });
+        }
+    }
 
     private void enviarMensaje() throws IOException {
-        String mensaje = campoMensaje.getText().trim();
-        if (!mensaje.isEmpty()) {
-            gestorChats.GuardarMensajes(usuarioEnSesion, otroUsuario, usuarioEnSesion + ": " + mensaje);
-            JLabel etiquetaMensaje = new JLabel(usuarioEnSesion + ": " + mensaje);
+        String texto = campoMensaje.getText().trim();
+        if (!texto.isEmpty()) {
+            // Crear el mensaje solo con el remitente y el texto
+            MensajeChat mensaje = new MensajeChat(texto, usuarioEnSesion);
+
+            // Enviar el mensaje al servidor junto con el destinatario
+            clientePrivado.enviarMensaje(mensaje, otroUsuario);
+
+            // Mostrar el mensaje en la interfaz localmente
+            JLabel etiquetaMensaje = new JLabel(mensaje.toString());
             panelMensajes.add(etiquetaMensaje);
             campoMensaje.setText("");
             panelMensajes.revalidate();

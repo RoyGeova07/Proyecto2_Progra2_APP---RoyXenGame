@@ -240,7 +240,7 @@ public class MenuPrincipal extends JFrame {
                 return;
             }
             //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
-            String[] opciones = {"Listar Usuarios", "Ingresar carpetas Usuarios","Borrar Usuarios","Ingresar a a Biblioteca de usuarios"};
+            String[] opciones = {"Listar Usuarios", "Ingresar carpetas Usuarios","Borrar Usuarios","Ingresar a  Biblioteca de usuarios"};
 //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
             //AGREGAR OTRA OPCION PARA PODER ENTRAR A LA BIBLIOTECA DE LOS DEMAS USUARIOSSSSSSS
             
@@ -398,8 +398,6 @@ public class MenuPrincipal extends JFrame {
 
         Cerrar_Sesion.addActionListener(e -> {
 
-                MenuInicio inicio = new MenuInicio();
-                inicio.setVisible(true);
                 dispose();
                 
         });

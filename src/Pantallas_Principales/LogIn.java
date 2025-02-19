@@ -48,7 +48,7 @@ public class LogIn extends JFrame {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setOpaque(false); // Para que sea transparente y se vea el fondo
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20, 20));
 
         // Título
         JLabel tituloLabel = new JLabel("Iniciar Sesion");
@@ -62,10 +62,10 @@ public class LogIn extends JFrame {
         JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         usuarioPanel.setOpaque(false); // Transparente
         JLabel usuarioLabel = new JLabel("Usuario:");
-        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 17));
+        usuarioLabel.setFont(new Font("Arial", Font.BOLD,17));
         usuarioLabel.setForeground(Color.LIGHT_GRAY);
         usuarioField = new JTextField(15);
-        usuarioField.setFont(new Font("Arial", Font.PLAIN, 17));
+        usuarioField.setFont(new Font("Arial", Font.PLAIN,17));
         usuarioPanel.add(usuarioLabel);
         usuarioPanel.add(usuarioField);
         mainPanel.add(usuarioPanel);
@@ -74,9 +74,9 @@ public class LogIn extends JFrame {
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         passwordPanel.setOpaque(false); // Transparente
         JLabel passwordLabel = new JLabel("Contraseña:");
-        passwordLabel.setFont(new Font("Arial", Font.BOLD, 17));
+        passwordLabel.setFont(new Font("Arial", Font.BOLD,17));
         passwordField = new JPasswordField(15);
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 17));
+        passwordField.setFont(new Font("Arial", Font.PLAIN,17));
         passwordLabel.setForeground(Color.LIGHT_GRAY);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
@@ -90,6 +90,7 @@ public class LogIn extends JFrame {
 
         // Eventos de Botones
         iniciarSesionButton.addActionListener(e -> {
+            
             String usuario = usuarioField.getText();
             String password = new String(passwordField.getPassword());
 
@@ -119,13 +120,13 @@ public class LogIn extends JFrame {
         cancelarButton.addActionListener(e -> limpiarCampos());
 
         volverButton.addActionListener(e -> {
-            new MenuInicio().setVisible(true);
+            
             dispose();
         });
     }
 
     private JPanel crearPanelBotones() {
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 10, 10)); // 1 fila, 3 columnas
+        JPanel buttonPanel = new JPanel(new GridLayout(1,3,10,10)); // 1 fila, 3 columnas
         buttonPanel.setOpaque(false); // Transparente
 
         iniciarSesionButton = crearBoton("Iniciar Sesion");
@@ -146,17 +147,17 @@ public class LogIn extends JFrame {
     private JButton crearBoton(String texto){
         JButton boton = new JButton(texto);
         boton.setFont(new Font("Consolas", Font.BOLD, 17)); // Tamaño de fuente más pequeño
-        boton.setPreferredSize(new Dimension(130, 40)); // Tamaño reducido
+        boton.setPreferredSize(new Dimension(130,40)); // Tamaño reducido
         boton.setBackground(Color.BLUE);
         boton.setForeground(Color.WHITE);
         boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createLineBorder(new Color(0, 122, 204), 2, true));
+        boton.setBorder(BorderFactory.createLineBorder(new Color(0,122,204), 2, true));
 
         // Efecto de hover (cambiar color al pasar el mouse)
         boton.addMouseListener(new java.awt.event.MouseAdapter(){
             public void mouseEntered(java.awt.event.MouseEvent evt){
                 boton.setContentAreaFilled(true);
-                boton.setBackground(new Color(0, 0, 0, 50)); // Negro con 50/255 de transparencia.
+                boton.setBackground(new Color(0,0,0,50)); // Negro con 50/255 de transparencia.
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt){

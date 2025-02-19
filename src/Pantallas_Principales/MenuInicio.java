@@ -68,7 +68,7 @@ public class MenuInicio extends JFrame {
                  
                  CrearUsuario crear=new CrearUsuario();
                  crear.setVisible(true);
-                 dispose();
+                
                  
              }
             
@@ -79,7 +79,7 @@ public class MenuInicio extends JFrame {
                  
                  LogIn entrar=new LogIn();
                  entrar.setVisible(true);
-                 dispose();
+                
              }
             
         });
